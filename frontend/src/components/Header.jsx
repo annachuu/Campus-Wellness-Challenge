@@ -39,7 +39,8 @@ function Header() {
         <AppBar 
             position="fixed" 
             className="header-container"
-            sx={{ 
+            sx={{
+                backgroundColor: '#283D3B',
                 width: '100vw',
                 left: 0,
                 right: 0
