@@ -151,7 +151,7 @@ function Login() {
             <Paper className="auth-container">
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <Typography component="h1" variant="h4" className="auth-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Icon sx={{ color: '#1976d2', fontSize: '1.5rem' }}>
+                        <Icon sx={{ color: '#283D3B', fontSize: '1.5rem' }}>
                             <FaSignInAlt />
                         </Icon>
                         Login
@@ -206,7 +206,8 @@ function Login() {
                         variant="contained"
                         color="primary"
                         size="large"
-                        className="primary-button"
+                        sx={{backgroundColor: '#283D3B'}}
+                        className="primary-button"                                              // I think MUI overrides the changes made in CSS ???
                     >
                         Login
                     </Button>
@@ -214,7 +215,7 @@ function Login() {
                     <Box sx={{ mt: 2, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
                             Don't have an account yet?{' '}
-                            <Link component={RouterLink} to="/pick-role" color="primary">
+                            <Link component={RouterLink} to="/pick-role" color="primary" sx={{color: '#795663'}}>
                                 Sign up here
                             </Link>
                         </Typography>
