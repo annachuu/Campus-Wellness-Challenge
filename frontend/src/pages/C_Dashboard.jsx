@@ -55,7 +55,7 @@ function C_Dashboard() {
                     backgroundColor: '#f5f5f5',
                     borderRadius: 1
                 }}>
-                    <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56 }}>
+                    <Avatar sx={{ bgcolor: '#d9bcaf', width: 56, height: 56 }}>
                         <FaUser size={24} />
                     </Avatar>
                     <Box>
@@ -74,7 +74,7 @@ function C_Dashboard() {
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 1,
-                        color: '#1976d2',
+                        color: '#795663',
                         mb: 2
                     }}>
                         <FaTrophy />

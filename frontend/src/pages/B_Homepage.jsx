@@ -39,6 +39,7 @@ function Homepage() {
             color="primary"
             onClick={() => navigate('/login')}
             size="large"
+            sx={{backgroundColor: '#283D3B'}}
             className="primary-button"
           >
             Login
@@ -49,6 +50,7 @@ function Homepage() {
             color="primary"
             onClick={() => navigate('/pick-role')}
             size="large"
+            sx={{backgroundColor: '#283D3B'}}
             className="secondary-button"
           >
             Sign Up
