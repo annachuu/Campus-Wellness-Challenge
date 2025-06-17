@@ -153,7 +153,7 @@ function P_ViewChallenge() {
 
             {/* Challenge Title */}
             <Typography variant="h4" component="h1" gutterBottom sx={{ 
-                color: '#1976d2',
+                color: '#283D3B',
                 mb: 4,
                 mt: 4,
                 textAlign: 'center'
@@ -186,7 +186,7 @@ function P_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaTrophy />
                                 Challenge Details
@@ -303,7 +303,7 @@ function P_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaTrophy />
                                 Leaderboard
@@ -378,7 +378,7 @@ function P_ViewChallenge() {
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     gap: 1,
-                                    color: '#1976d2'
+                                    color: '#283D3B'
                                 }}>
                                     <FaFile />
                                     Resources
@@ -405,7 +405,8 @@ function P_ViewChallenge() {
                                                                 download={resource.fileName}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                sx={{ ml: 2 }}
+                                                                color="#795663"
+                                                                sx={{ ml: 2, color: '#795663'}}
                                                             >
                                                                 Download
                                                             </Link>
@@ -438,7 +439,7 @@ function P_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaComments />
                                 Forum Posts

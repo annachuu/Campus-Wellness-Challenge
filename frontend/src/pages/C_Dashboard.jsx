@@ -97,7 +97,7 @@ function C_Dashboard() {
                                             }}
                                     >
                                         <CardActionArea onClick={() => handleChallengeClick(challenge._id)}>
-                                            <CardContent sx={{backgroundColor: '#8a9688'}}>
+                                            <CardContent sx={{backgroundColor: '#d9bcaf'}}>
                                                 <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     {challenge.name}
                                                 </Typography>
@@ -152,7 +152,7 @@ function C_Dashboard() {
                         size="large"
                         startIcon={<FaPlus />}
                         onClick={() => navigate('/create-challenge')}
-                        sx={{ width: '100%', maxWidth: 400, backgroundColor: '#283D3B'}}
+                        sx={{ width: '100%', maxWidth: 400, backgroundColor: '#8a9688'}}
                     >
                         Create Challenge
                     </Button>
@@ -173,11 +173,11 @@ function C_Dashboard() {
 
                     <Button
                         variant="outlined"
-                        color="#283D3B"
+                        color="#8a9688"
                         size="large"
                         startIcon={<FaUserPlus />}
                         onClick={() => navigate('/enroll-participant')}
-                        sx={{ width: '100%', maxWidth: 400, color: '#283D3B'}}
+                        sx={{ width: '100%', maxWidth: 400, color: '#8a9688'}}
                     >
                         Enroll Participant
                     </Button>
