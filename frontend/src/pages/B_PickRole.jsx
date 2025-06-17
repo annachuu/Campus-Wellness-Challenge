@@ -19,15 +19,18 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css';
+import background from '../images/background.jpg';
+
 
 function PickRole() {
   const navigate = useNavigate();
 
   return (
+    <Box>
     <Container component="main" maxWidth="sm" className="page-container">
       {/* Back Arrow */}
-      <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 400, mt: 6}}>
-          <ArrowBackIosNewIcon />
+      <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 450, mt: 6}}>
+                <ArrowBackIosNewIcon sx={{color: 'white', fontSize: '3rem'}}/>
       </IconButton>
 
       <Paper className="homepage-container">
@@ -65,6 +68,8 @@ function PickRole() {
         </Box>
       </Paper>
     </Container>
+    <img src={background} style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, pointerEvents: 'none',}}/>
+    </Box>
   );
 }
 

@@ -33,6 +33,8 @@ import {
 import { Link as RouterLink } from 'react-router-dom'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
+import background from '../images/background.jpg';
+
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -142,10 +144,11 @@ function Login() {
     }
 
     return (
+        <Box>
         <Container component="main" maxWidth="md" className="page-container">
             {/* Back Arrow */}
             <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 450, mt: 6}}>
-                <ArrowBackIosNewIcon />
+                <ArrowBackIosNewIcon sx={{color: 'white', fontSize: '3rem'}}/>
             </IconButton>
 
             <Paper className="auth-container">
@@ -229,6 +232,10 @@ function Login() {
                 </Box>
             </Paper>
         </Container>
+        
+        <img src={background} style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, pointerEvents: 'none',}}/>
+        
+        </Box>
     )
 }
 

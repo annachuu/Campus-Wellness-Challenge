@@ -23,10 +23,14 @@ import {
   Button,
   Box,
   Icon,
-  Link
+  Link,
+  IconButton
 } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
+import background from '../images/background.jpg';
+
 
 function P_Register() {
     const [formData, setFormData] = useState({
@@ -108,7 +112,12 @@ function P_Register() {
     }
 
     return (
+        <Box>
         <Container component="main" maxWidth="md" className="page-container">
+            <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 450, mt: 6}}>
+                            <ArrowBackIosNewIcon sx={{color: 'white', fontSize: '3rem'}}/>
+            </IconButton>
+
             <Paper className="auth-container">
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <Typography component="h1" variant="h4" className="auth-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -205,6 +214,8 @@ function P_Register() {
                 </Box>
             </Paper>
         </Container>
+        <img src={background} style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1, pointerEvents: 'none',}}/>
+        </Box>
     )
 }
 
