@@ -30,6 +30,9 @@ const coordinatorRoutes = require('./routes/coordinatorRoutes')
 const challengeRoutes = require('./routes/challengeRoutes')
 const leaderboardRoutes = require('./routes/leaderboardRoutes')
 const resourceRoutes = require('./routes/resourceRoutes')
+const forumRoutes = require('./routes/forumRoutes')
+const achievementRoutes = require('./routes/achievementRoutes')
+
 
 app.use('/api/participants', participantRoutes)
 app.use('/api/coordinators', coordinatorRoutes)
