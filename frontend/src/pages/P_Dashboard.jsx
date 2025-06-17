@@ -113,8 +113,8 @@ function P_Dashboard() {
                     ) : challenges && challenges.length > 0 ? (
                         <Grid container spacing={2}>
                             {challenges.map((challenge) => (
-                                <Grid item xs={12} sm={6} key={challenge._id}>
-                                    <Card 
+                                <Grid item xs={12} sm={6} key={challenge._id} sx={{width: 250}}>
+                                    <Card  
                                         onClick={() => handleChallengeClick(challenge._id)}
                                         sx={{ 
                                             cursor: 'pointer',
@@ -122,35 +122,36 @@ function P_Dashboard() {
                                             '&:hover': {
                                                 transform: 'translateY(-4px)',
                                                 boxShadow: 3
-                                            }
+                                            },
+                                            backgroundColor: '#8a9688'
                                         }}
                                     >
                                         <CardContent>
-                                            <Typography variant="h6" component="h3" gutterBottom>
+                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                 {challenge.name}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" paragraph>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
                                                 {challenge.description}
                                             </Typography>
                                             <Box sx={{ mb: 2 }}>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     Points: {challenge.points}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     Type: {challenge.type}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     Goal: {challenge.goal}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     Frequency: {challenge.frequency}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     Participants: {challenge.participantCount || 0}
                                                 </Typography>
                                             </Box>
                                             <Divider sx={{ my: 1 }} />
-                                            <Typography variant="caption" color="text.secondary">
+                                            <Typography variant="caption" color="text.secondary" sx={{ color: '#FFFFFF'}}>
                                                 {new Date(challenge.startDate).toLocaleDateString()} to {new Date(challenge.endDate).toLocaleDateString()}
                                             </Typography>
                                         </CardContent>

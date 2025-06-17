@@ -83,8 +83,19 @@ function C_Dashboard() {
                     <Grid container spacing={2}>
                         {Array.isArray(challenges) && challenges.length > 0 ? (
                             challenges.map((challenge) => (
-                                <Grid item xs={12} sm={6} key={challenge._id}>
-                                    <Card>
+                                <Grid item xs={12} sm={6} key={challenge._id} sx={{width: 250}}>
+                                    <Card
+                                        onClick={() => handleChallengeClick(challenge._id)}
+                                            sx={{ 
+                                                cursor: 'pointer',
+                                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                                '&:hover': {
+                                                    transform: 'translateY(-4px)',
+                                                    boxShadow: 3
+                                                },
+                                                backgroundColor: '#8a9688'
+                                            }}
+                                    >
                                         <CardActionArea onClick={() => handleChallengeClick(challenge._id)}>
                                             <CardContent sx={{backgroundColor: '#8a9688'}}>
                                                 <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
@@ -107,6 +118,9 @@ function C_Dashboard() {
                                                         Participants: {challenge.participantCount || 0}
                                                     </Typography>
                                                 </Box>
+
+                                                <Divider sx={{ my: 1 }} />
+                                                
                                                 <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF'}}>
                                                     {new Date(challenge.startDate).toLocaleDateString()} to {new Date(challenge.endDate).toLocaleDateString()}
                                                 </Typography>

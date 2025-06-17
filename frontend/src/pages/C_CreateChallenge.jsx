@@ -103,7 +103,7 @@ function C_CreateChallenge() {
 
                 <Box component="form" onSubmit={onSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} sx={{width: 200}}>
                             <TextField
                                 required
                                 fullWidth
@@ -115,7 +115,7 @@ function C_CreateChallenge() {
                                 onChange={onChange}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} sx={{width: 370}}>
                             <TextField
                                 required
                                 fullWidth
@@ -127,7 +127,7 @@ function C_CreateChallenge() {
                                 onChange={onChange}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6} sx={{width: 200}}>
+                        <Grid item xs={12} sm={6} sx={{width: 160}}>
                             <Grid container spacing={2}>
                                 <TextField
                                     required
@@ -164,7 +164,7 @@ function C_CreateChallenge() {
                         <Grid item xs={12} sm={6}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={6}>
-                                    <FormControl fullWidth required sx={{width: 200}}>
+                                    <FormControl fullWidth required sx={{width: 250}}>
                                         <InputLabel>Challenge Type</InputLabel>
                                         <Select
                                             name="type"
@@ -179,7 +179,7 @@ function C_CreateChallenge() {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={6} sx={{width: 230}}>
                                         <TextField
                                             required
                                             fullWidth
@@ -195,7 +195,7 @@ function C_CreateChallenge() {
                         </Grid>
                     
                         <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth required sx={{width: 200}}>
+                            <FormControl fullWidth required sx={{width: 250}}>
                                 <InputLabel>Frequency</InputLabel>
                                 <Select
                                     name="frequency"
