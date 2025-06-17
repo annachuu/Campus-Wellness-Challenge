@@ -86,25 +86,25 @@ function C_Dashboard() {
                                 <Grid item xs={12} sm={6} key={challenge._id}>
                                     <Card>
                                         <CardActionArea onClick={() => handleChallengeClick(challenge._id)}>
-                                            <CardContent>
-                                                <Typography variant="h6" component="h3" gutterBottom>
+                                            <CardContent sx={{backgroundColor: '#8a9688'}}>
+                                                <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                     {challenge.name}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" paragraph>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
                                                     {challenge.description}
                                                 </Typography>
                                                 <Box sx={{ mb: 2 }}>
-                                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                         Type: {challenge.type}
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                         Goal: {challenge.goal}
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                         Frequency: {challenge.frequency}
                                                     </Typography>
                                                 </Box>
-                                                <Typography variant="caption" color="text.secondary" display="block">
+                                                <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF'}}>
                                                     {new Date(challenge.startDate).toLocaleDateString()} to {new Date(challenge.endDate).toLocaleDateString()}
                                                 </Typography>
                                             </CardContent>
@@ -135,7 +135,7 @@ function C_Dashboard() {
                         size="large"
                         startIcon={<FaPlus />}
                         onClick={() => navigate('/create-challenge')}
-                        sx={{ width: '100%', maxWidth: 400 }}
+                        sx={{ width: '100%', maxWidth: 400, backgroundColor: '#283D3B'}}
                     >
                         Create Challenge
                     </Button>
@@ -156,11 +156,11 @@ function C_Dashboard() {
 
                     <Button
                         variant="outlined"
-                        color="primary"
+                        color="#283D3B"
                         size="large"
                         startIcon={<FaUserPlus />}
                         onClick={() => navigate('/enroll-participant')}
-                        sx={{ width: '100%', maxWidth: 400 }}
+                        sx={{ width: '100%', maxWidth: 400, color: '#283D3B'}}
                     >
                         Enroll Participant
                     </Button>
