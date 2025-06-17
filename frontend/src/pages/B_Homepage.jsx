@@ -25,7 +25,7 @@ function Homepage() {
   return (
     <Box>
       <Container component="main" maxWidth="sm" className="page-container">
-        <Paper className="homepage-container">
+        <Paper className="homepage-container" sx={{backgroundColor: 'rgba(255, 255, 255, 0.90)'}}>
           <Typography 
             component="h1" 
             variant="h2" 

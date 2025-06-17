@@ -33,7 +33,7 @@ function PickRole() {
                 <ArrowBackIosNewIcon sx={{color: 'white', fontSize: '3rem'}}/>
       </IconButton>
 
-      <Paper className="homepage-container">
+      <Paper className="homepage-container"  sx={{backgroundColor: 'rgba(255, 255, 255, 0.90)'}}>
         <Typography 
           component="h1" 
           variant="h2" 

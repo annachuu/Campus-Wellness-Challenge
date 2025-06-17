@@ -151,7 +151,7 @@ function Login() {
                 <ArrowBackIosNewIcon sx={{color: 'white', fontSize: '3rem'}}/>
             </IconButton>
 
-            <Paper className="auth-container">
+            <Paper className="auth-container" sx={{backgroundColor: 'rgba(255, 255, 255, 0.90)'}}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <Typography component="h1" variant="h4" className="auth-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Icon sx={{ color: '#283D3B', fontSize: '1.5rem' }}>
