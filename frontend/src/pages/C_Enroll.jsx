@@ -114,7 +114,7 @@ function EnrollParticipant() {
                 </IconButton>
 
                 {/* Page Title */}
-                <Typography variant="h4" sx={{mb: 4}}>
+                <Typography variant="h4" sx={{mb: 4, color: '#283D3B'}}>
                     Enroll
                 </Typography>
             </Box>
@@ -187,7 +187,7 @@ function EnrollParticipant() {
             </Box>
              <Button 
                 variant="contained"
-                sx={{px: 4, py: 2, mt: 3}}
+                sx={{px: 4, py: 2, mt: 3, backgroundColor: '#283D3B'}}
                 onClick={handleEnroll}
                 disabled={enrollmentLoading}
             >

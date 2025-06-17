@@ -184,13 +184,13 @@ function UploadResource() {
                 )}
 
                 <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 4}}>
-                    <Button variant="outlined" color="secondary" onClick={() => navigate('/view-challenge')}>
+                    <Button variant="outlined" color="#8a9688" onClick={() => navigate('/view-challenge')}>
                         Cancel
                     </Button>
 
                     <Button 
                         variant="contained" 
-                        color="primary" 
+                        color="#8a9688" 
                         onClick={handleUpload}
                         disabled={!resourceTitle.trim() || files.length === 0 || isLoading}
                     >

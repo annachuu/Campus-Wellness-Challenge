@@ -95,7 +95,8 @@ function C_CreateChallenge() {
                 <Typography variant="h4" component="h1" gutterBottom sx={{ 
                     color: '#1976d2',
                     mb: 4,
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    color: '#283D3B'
                 }}>
                     Create Challenge
                 </Typography>
@@ -214,7 +215,7 @@ function C_CreateChallenge() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{ mt: 3, mb: 2, backgroundColor: '#283D3B' }}
                         startIcon={<FaPlus />}
                     >
                         Create Challenge

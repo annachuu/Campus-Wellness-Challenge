@@ -54,7 +54,7 @@ function Leaderboard() {
                 <ArrowBackIosNewIcon />
             </IconButton>
 
-            <Typography component="h1" variant="h4" className="page-title" sx={{ mb: 4, color: '#1976d2', mt: -1 }}>
+            <Typography component="h1" variant="h4" className="page-title" sx={{ mb: 4, color: '#283d3b', mt: -1 }}>
                 Leaderboard
             </Typography>
 

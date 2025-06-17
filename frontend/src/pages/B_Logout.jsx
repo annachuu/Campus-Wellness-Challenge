@@ -61,7 +61,7 @@ function Logout() {
                     Bye! {user?.name || 'User'}
                 </Typography>
 
-                <Button variant="contained" color="primary" onClick={handleConfirmLogout} fullWidth sx={{mt: 6, height: 55, width: 180}}>
+                <Button variant="contained" color="primary" onClick={handleConfirmLogout} fullWidth sx={{mt: 6, height: 55, width: 180, backgroundColor: '#283d3b'}}>
                     Confirm Logout
                 </Button>
             </Paper>

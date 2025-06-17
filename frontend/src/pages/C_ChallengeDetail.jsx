@@ -62,7 +62,6 @@ function C_ChallengeDetail() {
     }
 
     const handleAddResource = () => {
-        // TODO: Implement resource addition logic
         console.log('Add resource clicked')
     }
 

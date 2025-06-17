@@ -86,7 +86,7 @@ function C_ViewChallenge() {
 
             {/* Challenge Title */}
             <Typography variant="h4" component="h1" gutterBottom sx={{ 
-                color: '#1976d2',
+                color: '#283D3B',
                 mb: 4,
                 mt: 4,
                 textAlign: 'center'
@@ -119,7 +119,7 @@ function C_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaTrophy />
                                 Challenge Details
@@ -134,9 +134,9 @@ function C_ViewChallenge() {
                                         navigate('/upload-resource')
                                     }}
                                     sx={{
-                                        backgroundColor: '#1976d2',
+                                        backgroundColor: '#283D3B',
                                         '&:hover': {
-                                            backgroundColor: '#1565c0'
+                                            backgroundColor: '#8a9688'
                                         }
                                     }}
                                 >
@@ -195,7 +195,7 @@ function C_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaTrophy />
                                 Leaderboard
@@ -270,7 +270,7 @@ function C_ViewChallenge() {
                                     display: 'flex', 
                                     alignItems: 'center', 
                                     gap: 1,
-                                    color: '#1976d2'
+                                    color: '#283D3B'
                                 }}>
                                     <FaFile />
                                     Resources
@@ -280,9 +280,9 @@ function C_ViewChallenge() {
                                     startIcon={<FaPlus />}
                                     onClick={() => navigate('/upload-resource')}
                                     sx={{ 
-                                        backgroundColor: '#1976d2',
+                                        backgroundColor: '#283D3B',
                                         '&:hover': {
-                                            backgroundColor: '#1565c0'
+                                            backgroundColor: '#8a9688'
                                         }
                                     }}
                                 >
@@ -343,7 +343,7 @@ function C_ViewChallenge() {
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
-                                color: '#1976d2'
+                                color: '#283D3B'
                             }}>
                                 <FaComments />
                                 Forum Posts
@@ -369,9 +369,9 @@ function C_ViewChallenge() {
                     variant="contained"
                     onClick={() => navigate('/enroll-participant')}
                     sx={{
-                        backgroundColor: '#1976d2',
+                        backgroundColor: '#283D3B',
                         '&:hover': {
-                            backgroundColor: '#1565c0'
+                            backgroundColor: '#8a9688'
                         },
                         minWidth: '200px'
                     }}
