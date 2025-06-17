@@ -49,7 +49,7 @@ function P_Dashboard() {
         navigate('/participant/view-challenge')
     }
 
-    // Mock data for achievements - replace with actual data from your backend
+    // Mock data for achievements
     const achievements = [
         {
             id: 1,
@@ -144,6 +144,9 @@ function P_Dashboard() {
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                                     Frequency: {challenge.frequency}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    Participants: {challenge.participantCount || 0}
                                                 </Typography>
                                             </Box>
                                             <Divider sx={{ my: 1 }} />

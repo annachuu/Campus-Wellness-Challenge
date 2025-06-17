@@ -22,6 +22,7 @@ import Leaderboard from './pages/B_Leaderboard'
 import UploadResource from './pages/C_UploadResource'
 import EnrollParticipant from './pages/C_Enroll.jsx'
 import C_ChallengeDetail from './pages/C_ChallengeDetail'
+import C_AddAchievement from './pages/C_AddAchievement.jsx'
 import Forum from './pages/B_Forum'
 
 // Logged in users
@@ -122,6 +123,12 @@ function App() {
             <Route path='/challenge-detail' element={
               <RoleRoute allowedRoles={['coordinator']}>
                 <C_ChallengeDetail />
+              </RoleRoute>
+            } />
+
+            <Route path='/add-achievement' element={
+              <RoleRoute allowedRoles={['coordinator']}>
+                <C_AddAchievement />
               </RoleRoute>
             } />
 

@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getChallenges } from '../features/challenges/challengeSlice'
 import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
+import { getChallengeAchievements } from '../features/achievements/achievementSlice'
 import {
     Container,
     Paper,
@@ -40,6 +41,7 @@ function C_ViewChallenge() {
     const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
     const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
+    const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const [selectedChallenge, setSelectedChallenge] = useState(null)
 
     useEffect(() => {
@@ -57,6 +59,7 @@ function C_ViewChallenge() {
                 setSelectedChallenge(challenge)
                 dispatch(getLeaderboard(challenge._id))
                 dispatch(getChallengeResources(challenge._id))
+                dispatch(getChallengeAchievements(challenge._id))
             }
         }
     }, [dispatch, challenges])
@@ -124,25 +127,6 @@ function C_ViewChallenge() {
                                 <FaTrophy />
                                 Challenge Details
                             </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                                <Button
-                                    variant="contained"
-                                    startIcon={<FaPlus />}
-                                    onClick={() => {
-                                        // Store the current challenge ID for the upload resource page
-                                        localStorage.setItem('selectedChallengeId', selectedChallenge._id)
-                                        navigate('/upload-resource')
-                                    }}
-                                    sx={{
-                                        backgroundColor: '#283D3B',
-                                        '&:hover': {
-                                            backgroundColor: '#8a9688'
-                                        }
-                                    }}
-                                >
-                                    Add Resource
-                                </Button>
-                            </Box>
                             <List sx={{ flexGrow: 1, overflow: 'auto' }}>
                                 <ListItem>
                                     <ListItemText 
@@ -178,19 +162,77 @@ function C_ViewChallenge() {
                                         secondary={`${new Date(selectedChallenge.startDate).toLocaleDateString()} to ${new Date(selectedChallenge.endDate).toLocaleDateString()}`}
                                     />
                                 </ListItem>
+                                <Divider />
+                                <ListItem>
+                                    <Typography variant="subtitle1" sx={{ color: '#283D3B', fontWeight: 'bold' }}>
+                                        Achievements
+                                    </Typography>
+                                </ListItem>
+                                {achievements && achievements.length > 0 ? (
+                                    achievements.map((achievement) => (
+                                        <React.Fragment key={achievement._id}>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={achievement.title}
+                                                    secondary={`${achievement.points} points • ${achievement.refreshTime}`}
+                                                />
+                                            </ListItem>
+                                            <Divider />
+                                        </React.Fragment>
+                                    ))
+                                ) : (
+                                    <ListItem>
+                                        <ListItemText
+                                            primary="No achievements yet"
+                                            sx={{ fontStyle: 'italic' }}
+                                        />
+                                    </ListItem>
+                                )}
+                                <Divider />
+                                <ListItem>
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<FaPlus />}
+                                        onClick={() => {
+                                            localStorage.setItem('selectedChallengeId', selectedChallenge._id)
+                                            navigate('/add-achievement')
+                                        }}
+                                        sx={{
+                                            backgroundColor: '#283D3B',
+                                            '&:hover': {
+                                                backgroundColor: '#8a9688'
+                                            },
+                                            width: '100%'
+                                        }}
+                                    >
+                                        Add Achievement
+                                    </Button>
+                                </ListItem>
                             </List>
                         </Paper>
                     </Grid>
 
                     {/* Top Right - Leaderboard */}
                     <Grid item>
-                        <Paper sx={{ 
-                            p: 2, 
-                            height: '100%',
-                            aspectRatio: '1/1',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
+                        <Paper 
+                            onClick={() => {
+                                localStorage.setItem('selectedChallengeId', selectedChallenge._id)
+                                navigate('/leaderboard')
+                            }}
+                            sx={{ 
+                                p: 2, 
+                                height: '100%',
+                                aspectRatio: '1/1',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 3
+                                }
+                            }}
+                        >
                             <Typography variant="h6" component="h2" gutterBottom sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
