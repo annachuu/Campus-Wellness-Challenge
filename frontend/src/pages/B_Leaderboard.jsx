@@ -7,7 +7,7 @@
     For: Both coordinator and participants
 */
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {
   Container,
@@ -20,35 +20,95 @@ import {
   ListItemAvatar,
   Avatar,
   Icon,
-  IconButton
+  IconButton,
+  CircularProgress
 } from '@mui/material'
 import { FaCrown } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
+import axios from 'axios'
+
+// Configure axios base URL
+axios.defaults.baseURL = 'http://localhost:5000'
 
 function Leaderboard() {
-    // Mock data 
-    const leaderboardData = [
-        { id: 1, name: 'John Doe', points: 1500, rank: 1 },
-        { id: 2, name: 'Jane Smith', points: 1200, rank: 2 },
-        { id: 3, name: 'Mike Johnson', points: 1000, rank: 3 },
-        { id: 4, name: 'Sarah Williams', points: 800, rank: 4 },
-        { id: 5, name: 'David Brown', points: 750, rank: 5 },
-        { id: 6, name: 'Emily Davis', points: 700, rank: 6 },
-        { id: 7, name: 'Michael Wilson', points: 650, rank: 7 },
-        { id: 8, name: 'Lisa Anderson', points: 600, rank: 8 },
-    ]
+    const [leaderboardData, setLeaderboardData] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchLeaderboard = async () => {
+            try {
+                const challengeId = localStorage.getItem('selectedChallengeId')
+                console.log('Fetching leaderboard for challenge:', challengeId)
+                
+                if (!challengeId) {
+                    setError('No challenge selected')
+                    setLoading(false)
+                    return
+                }
+
+                const token = localStorage.getItem('token')
+                console.log('Using token:', token ? 'Token exists' : 'No token found')
+
+                const response = await axios.get(`/api/leaderboard/${challengeId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+                console.log('Leaderboard response:', response.data)
+
+                // Transform the data to include rank
+                const dataWithRank = response.data.map((entry, index) => {
+                    console.log('Processing entry:', entry)
+                    return {
+                        id: entry._id,
+                        name: entry.participant?.name || 'Unknown Participant',
+                        points: entry.points || 0,
+                        rank: index + 1
+                    }
+                })
+
+                console.log('Transformed data:', dataWithRank)
+                setLeaderboardData(dataWithRank)
+                setLoading(false)
+            } catch (err) {
+                console.error('Error details:', {
+                    message: err.message,
+                    response: err.response?.data,
+                    status: err.response?.status
+                })
+                setError(err.response?.data?.message || err.message || 'Error fetching leaderboard')
+                setLoading(false)
+            }
+        }
+
+        fetchLeaderboard()
+    }, [])
+
+    if (loading) {
+        return (
+            <Container component="main" maxWidth="md" className="page-container" sx={{pt: 10, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <CircularProgress />
+            </Container>
+        )
+    }
+
+    if (error) {
+        return (
+            <Container component="main" maxWidth="md" className="page-container" sx={{pt: 10}}>
+                <Typography color="error">{error}</Typography>
+            </Container>
+        )
+    }
 
     const topThree = leaderboardData.slice(0, 3)
-
     const restOfList = leaderboardData.slice(3)
-    
-    const navigate = useNavigate();
-    
 
     return (
         <Container component="main" maxWidth="md" className="page-container" sx={{pt: 10}}>
-
             {/* Back Arrow */}
             <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 450}}>
                 <ArrowBackIosNewIcon />
@@ -91,10 +151,10 @@ function Leaderboard() {
                         <FaCrown />
                     </Icon>
                     <Typography variant="h6" sx={{ color: 'white' }}>
-                        {topThree[1]?.name}
+                        {topThree[1]?.name || 'No participant'}
                     </Typography>
                     <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
-                        {topThree[1]?.points}
+                        {topThree[1]?.points || 0}
                     </Typography>
                 </Paper>
 
@@ -121,10 +181,10 @@ function Leaderboard() {
                         <FaCrown />
                     </Icon>
                     <Typography variant="h6" sx={{ color: 'white' }}>
-                        {topThree[0]?.name}
+                        {topThree[0]?.name || 'No participant'}
                     </Typography>
                     <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
-                        {topThree[0]?.points}
+                        {topThree[0]?.points || 0}
                     </Typography>
                 </Paper>
 
@@ -151,10 +211,10 @@ function Leaderboard() {
                         <FaCrown />
                     </Icon>
                     <Typography variant="h6" sx={{ color: 'white' }}>
-                        {topThree[2]?.name}
+                        {topThree[2]?.name || 'No participant'}
                     </Typography>
                     <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
-                        {topThree[2]?.points}
+                        {topThree[2]?.points || 0}
                     </Typography>
                 </Paper>
             </Box>
@@ -183,6 +243,14 @@ function Leaderboard() {
                             />
                         </ListItem>
                     ))}
+                    {restOfList.length === 0 && (
+                        <ListItem>
+                            <ListItemText 
+                                primary="No other participants yet"
+                                sx={{ textAlign: 'center' }}
+                            />
+                        </ListItem>
+                    )}
                 </List>
             </Paper>
         </Container>

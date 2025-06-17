@@ -184,13 +184,25 @@ function C_ViewChallenge() {
 
                     {/* Top Right - Leaderboard */}
                     <Grid item>
-                        <Paper sx={{ 
-                            p: 2, 
-                            height: '100%',
-                            aspectRatio: '1/1',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
+                        <Paper 
+                            onClick={() => {
+                                localStorage.setItem('selectedChallengeId', selectedChallenge._id)
+                                navigate('/leaderboard')
+                            }}
+                            sx={{ 
+                                p: 2, 
+                                height: '100%',
+                                aspectRatio: '1/1',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 3
+                                }
+                            }}
+                        >
                             <Typography variant="h6" component="h2" gutterBottom sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 

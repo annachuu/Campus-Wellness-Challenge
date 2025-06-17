@@ -62,10 +62,32 @@ const enrollParticipants = asyncHandler(async (req, res) => {
 // @access Private
 const getLeaderboard = asyncHandler(async (req, res) => {
     const { challengeId } = req.params
+    console.log('Getting leaderboard for challenge:', challengeId)
+
+    // Verify the challenge exists
+    const challenge = await Challenge.findById(challengeId)
+    if (!challenge) {
+        console.log('Challenge not found:', challengeId)
+        res.status(404)
+        throw new Error('Challenge not found')
+    }
+
+    console.log('Challenge found:', challenge.name)
+
+    // Check if there are any participants enrolled
+    const participantCount = await Leaderboard.countDocuments({ challenge: challengeId })
+    console.log('Number of participants enrolled:', participantCount)
 
     const leaderboard = await Leaderboard.find({ challenge: challengeId })
         .populate('participant', 'name email')
         .sort({ points: -1 })
+
+    console.log('Found leaderboard entries:', leaderboard.length)
+
+    if (leaderboard.length === 0) {
+        console.log('No participants found in leaderboard')
+        return res.status(200).json([])
+    }
 
     res.status(200).json(leaderboard)
 })
