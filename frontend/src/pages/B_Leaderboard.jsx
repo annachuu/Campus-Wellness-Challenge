@@ -114,11 +114,12 @@ function Leaderboard() {
                 <ArrowBackIosNewIcon />
             </IconButton>
 
+            {/* Page Title */}
             <Typography component="h1" variant="h4" className="page-title" sx={{ mb: 4, color: '#283d3b', mt: -1 }}>
                 Leaderboard
             </Typography>
 
-            {/* Podium for top 3 */}
+            {/* Podium for Top 3 */}
             <Box sx={{ 
                 display: 'flex', 
                 justifyContent: 'center', 

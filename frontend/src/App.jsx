@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css'
 // Header
 import Header from './components/Header'
 
-
 // Pages
 import Homepage from './pages/B_Homepage'
 import Login from './pages/B_Login'
@@ -51,12 +50,23 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/coordinator-register' element={<CoordinatorRegister />} />
             <Route path='/pick-role' element={<PickRole />} />
+            <Route path='/leaderboard' element={<Leaderboard />} />
+            <Route path='/forum' element={<Forum />} />
 
             {/* Protected Routes */}
             <Route path='/logout' element={<PrivateRoute />}>
               <Route path='/logout' element={<Logout />} />
             </Route>
+            
+            <Route path='/enroll-participant' element={<PrivateRoute />}>
+              <Route path='/enroll-participant' element={<EnrollParticipant />} />
+            </Route>
 
+            <Route path='/upload-resource' element={<PrivateRoute />}>
+              <Route path='/upload-resource' element={<UploadResource />} />
+            </Route>
+
+            {/* Coordinator Routes */}
             <Route path='/coordinator-dashboard' element={
               <RoleRoute allowedRoles={['coordinator']}>
                 <CoordinatorDashboard />
@@ -69,37 +79,9 @@ function App() {
               </RoleRoute>
             } />
 
-            <Route path='/participant-dashboard' element={
-              <RoleRoute allowedRoles={['participant']}>
-                <ParticipantDashboard />
-              </RoleRoute>
-            } />
-
             <Route path='/view-challenge' element={
               <RoleRoute allowedRoles={['coordinator']}>
                 <ViewChallenge />
-              </RoleRoute>
-            } />
-
-            <Route path='/participant/view-challenge' element={
-              <RoleRoute allowedRoles={['participant']}>
-                <P_ViewChallenge />
-              </RoleRoute>
-            } />
-
-            <Route path='/enroll-participant' element={<PrivateRoute />}>
-              <Route path='/enroll-participant' element={<EnrollParticipant />} />
-            </Route>
-
-            <Route path='/leaderboard' element={<Leaderboard />} />
-
-            <Route path='/upload-resource' element={<PrivateRoute />}>
-              <Route path='/upload-resource' element={<UploadResource />} />
-            </Route>
-
-            <Route path='/register-participant' element={
-              <RoleRoute>
-                <Register />
               </RoleRoute>
             } />
 
@@ -108,12 +90,6 @@ function App() {
                 <EnrollParticipant />
               </RoleRoute>
             } />
-
-            {/* <Route path='/leaderboard' element={
-              <RoleRoute allowedRoles={['coordinator', 'participant']}>
-                <Leaderboard />
-              </RoleRoute>
-            } /> */}
 
             <Route path='/upload-resource' element={
               <RoleRoute allowedRoles={['coordinator']}>
@@ -133,13 +109,24 @@ function App() {
               </RoleRoute>
             } />
 
-            <Route path='/forum' element={
-              <RoleRoute allowedRoles={['participant', 'coordinator']}>
-                <Forum />
+            {/* Participant Routes */}
+            <Route path='/participant-dashboard' element={
+              <RoleRoute allowedRoles={['participant']}>
+                <ParticipantDashboard />
               </RoleRoute>
-            }
-              
-            />
+            } />
+
+            <Route path='/participant/view-challenge' element={
+              <RoleRoute allowedRoles={['participant']}>
+                <P_ViewChallenge />
+              </RoleRoute>
+            } />
+
+            <Route path='/register-participant' element={
+              <RoleRoute>
+                <Register />
+              </RoleRoute>
+            } />
 
           </Routes>
         </div>

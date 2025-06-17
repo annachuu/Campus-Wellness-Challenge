@@ -74,7 +74,7 @@ function Header() {
                                     Leaderboard
                                 </Link>
 
-                                <Link tp='/forum' className='header-button'>
+                                <Link to='/forum' className='header-button'>
                                     <ForumIcon style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 16}} />
                                     Forum
                                 </Link>
