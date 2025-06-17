@@ -26,7 +26,7 @@ function PickRole() {
   return (
     <Container component="main" maxWidth="sm" className="page-container">
       {/* Back Arrow */}
-      <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 450, mt: 6}}>
+      <IconButton onClick={() => navigate('/')} sx={{position: 'absolute', left: 400, mt: 6}}>
           <ArrowBackIosNewIcon />
       </IconButton>
 
@@ -47,18 +47,18 @@ function PickRole() {
             onClick={() => navigate('/register')}
             size="large"
             className="primary-button"
-            sx={{ mb: 2, width: '200px', height: '48px' }}
+            sx={{ mb: 2, width: '200px', height: '48px', backgroundColor: '#283D3B'}}
           >
             Participant
           </Button>
           
           <Button
             variant="outlined"
-            color="primary"
+            color="#283D3B"
             onClick={() => navigate('/coordinator-register')}
             size="large"
             className="secondary-button"
-            sx={{ width: '200px', height: '48px' }}
+            sx={{ width: '200px', height: '48px', color: '#283D3B'}}
           >
             Coordinator
           </Button>

@@ -119,7 +119,7 @@ function Register() {
             <Paper className="auth-container">
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                     <Typography component="h1" variant="h4" className="auth-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Icon sx={{ color: '#1976d2', fontSize: '1.5rem' }}>
+                        <Icon sx={{ color: '#795663', fontSize: '1.5rem' }}>
                             <FaUserPlus />
                         </Icon>
                         Register as Coordinator
@@ -141,6 +141,9 @@ function Register() {
                         onChange={onChange}
                         required
                         autoFocus
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
 
                     <TextField
@@ -154,6 +157,9 @@ function Register() {
                         required
                         error={!!emailError}
                         helperText={emailError}
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
                     
                     <TextField
@@ -165,6 +171,9 @@ function Register() {
                         value={password}
                         onChange={onChange}
                         required
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
 
                     <TextField
@@ -176,6 +185,9 @@ function Register() {
                         value={password2}
                         onChange={onChange}
                         required
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
 
                     <Button
@@ -184,6 +196,7 @@ function Register() {
                         color="primary"
                         size="large"
                         className="primary-button"
+                        sx={{ backgroundColor: '#283D3B'}}
                     >
                         Register
                     </Button>
@@ -191,7 +204,7 @@ function Register() {
                     <Box sx={{ mt: 2, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
                             Already have an account?{' '}
-                            <Link component={RouterLink} to="/login" color="primary">
+                            <Link component={RouterLink} to="/login" color="#795663" sx={{color: '#795663'}}>
                                 Sign in here
                             </Link>
                         </Typography>

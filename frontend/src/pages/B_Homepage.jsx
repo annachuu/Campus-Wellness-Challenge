@@ -47,10 +47,10 @@ function Homepage() {
           
           <Button
             variant="outlined"
-            color="primary"
+            color="#283D3B"
             onClick={() => navigate('/pick-role')}
             size="large"
-            sx={{backgroundColor: '#283D3B'}}
+            sx={{color: '#283D3B'}}
             className="secondary-button"
           >
             Sign Up

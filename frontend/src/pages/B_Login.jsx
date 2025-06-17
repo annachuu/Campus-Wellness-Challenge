@@ -163,7 +163,7 @@ function Login() {
                 </Typography>
 
                 <Box component="form" onSubmit={onSubmit} className="auth-form">
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{'& label.Mui-focused': {color: '#795663'}, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', color:'#795663', }, }, }}>
                         <InputLabel id="role-label">Role</InputLabel>
                         <Select
                             labelId="role-label"
@@ -188,6 +188,9 @@ function Login() {
                         onChange={onChange}
                         required
                         autoFocus
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
                     
                     <TextField
@@ -199,6 +202,9 @@ function Login() {
                         value={password}
                         onChange={onChange}
                         required
+                        sx={{'& label.Mui-focused': {color: '#795663'}, 
+                             '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#d9bcaf', }, }, 
+                            }}
                     />
 
                     <Button
@@ -215,7 +221,7 @@ function Login() {
                     <Box sx={{ mt: 2, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
                             Don't have an account yet?{' '}
-                            <Link component={RouterLink} to="/pick-role" color="primary" sx={{color: '#795663'}}>
+                            <Link component={RouterLink} to="/pick-role" color="#795663" sx={{color: '#795663'}}>
                                 Sign up here
                             </Link>
                         </Typography>
