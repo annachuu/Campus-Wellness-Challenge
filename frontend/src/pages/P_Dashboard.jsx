@@ -49,7 +49,7 @@ function P_Dashboard() {
         navigate('/participant/view-challenge')
     }
 
-    // Mock data for achievements - replace with actual data from your backend
+    // Mock data for achievements
     const achievements = [
         {
             id: 1,

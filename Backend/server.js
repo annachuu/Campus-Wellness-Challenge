@@ -30,12 +30,14 @@ const coordinatorRoutes = require('./routes/coordinatorRoutes')
 const challengeRoutes = require('./routes/challengeRoutes')
 const leaderboardRoutes = require('./routes/leaderboardRoutes')
 const resourceRoutes = require('./routes/resourceRoutes')
+const achievementRoutes = require('./routes/achievementRoutes')
 
 app.use('/api/participants', participantRoutes)
 app.use('/api/coordinators', coordinatorRoutes)
 app.use('/api/challenges', challengeRoutes)
 app.use('/api/leaderboard', leaderboardRoutes)
 app.use('/api/resources', resourceRoutes)
+app.use('/api/achievements', achievementRoutes)
 
 // Error handler
 app.use(errorHandler)

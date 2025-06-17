@@ -68,30 +68,6 @@ const getChallenge = asyncHandler(async (req, res) => {
         throw new Error('Challenge not found')
     }
 
-    // Check if user is the coordinator who created the challenge
-    if (challenge.createdBy.toString() === req.user.id) {
-        // Get participant count for this challenge
-        const participantCount = await Leaderboard.countDocuments({ 
-            challenge: challenge._id 
-        })
-        
-        const challengeObj = challenge.toObject()
-        challengeObj.participantCount = participantCount
-        
-        return res.status(200).json(challengeObj)
-    }
-
-    // If not the coordinator, check if user is a participant enrolled in the challenge
-    const leaderboardEntry = await Leaderboard.findOne({
-        challenge: req.params.id,
-        participant: req.user.id
-    })
-
-    if (!leaderboardEntry) {
-        res.status(401)
-        throw new Error('Not authorized to view this challenge')
-    }
-
     // Get participant count for this challenge
     const participantCount = await Leaderboard.countDocuments({ 
         challenge: challenge._id 
@@ -99,8 +75,33 @@ const getChallenge = asyncHandler(async (req, res) => {
     
     const challengeObj = challenge.toObject()
     challengeObj.participantCount = participantCount
-    
-    res.status(200).json(challengeObj)
+
+    // If user is a coordinator, check if they created the challenge
+    if (req.user.role === 'coordinator') {
+        if (challenge.createdBy.toString() === req.user.id) {
+            return res.status(200).json(challengeObj)
+        }
+        res.status(401)
+        throw new Error('Not authorized to view this challenge')
+    }
+
+    // If user is a participant, check if they are enrolled
+    if (req.user.role === 'participant') {
+        const leaderboardEntry = await Leaderboard.findOne({
+            challenge: req.params.id,
+            participant: req.user.id
+        })
+
+        if (!leaderboardEntry) {
+            res.status(401)
+            throw new Error('Not authorized to view this challenge')
+        }
+
+        return res.status(200).json(challengeObj)
+    }
+
+    res.status(401)
+    throw new Error('Not authorized to view this challenge')
 })
 
 module.exports = {

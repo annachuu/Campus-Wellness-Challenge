@@ -5,6 +5,8 @@ import participantReducer from '../features/participants/participantSlice'
 import leaderboardReducer from '../features/leaderboard/leaderboardSlice'
 import participantChallengesReducer from '../features/participantChallenges/participantChallengesSlice'
 import resourceReducer from '../features/resources/resourceSlice'
+import achievementReducer from '../features/achievements/achievementSlice'
+import achievementClaimReducer from '../features/achievements/achievementClaimSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +15,8 @@ export const store = configureStore({
     participants: participantReducer,
     leaderboard: leaderboardReducer,
     participantChallenges: participantChallengesReducer,
-    resources: resourceReducer
+    resources: resourceReducer,
+    achievements: achievementReducer,
+    achievementClaims: achievementClaimReducer
   },
 });

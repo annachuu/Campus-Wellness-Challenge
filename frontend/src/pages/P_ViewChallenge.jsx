@@ -7,12 +7,14 @@
     For: Participants
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getChallenge, getChallenges } from '../features/challenges/challengeSlice'
 import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
+import { getChallengeAchievements } from '../features/achievements/achievementSlice'
+import { claimAchievement } from '../features/achievements/achievementClaimSlice'
 import {
     Container,
     Paper,
@@ -26,19 +28,24 @@ import {
     ListItemText,
     CircularProgress,
     Alert,
-    Link
+    Link,
+    Button
 } from '@mui/material'
-import { FaTrophy, FaComments, FaArrowLeft, FaFile } from 'react-icons/fa'
+import { FaTrophy, FaComments, FaArrowLeft, FaFile, FaCheck } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
 
 function P_ViewChallenge() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { challenge, challenges, isLoading: challengeLoading, isError: challengeError, message: challengeMessage } = useSelector((state) => state.challenge)
+    const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
     const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
+    const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
+    const { loading: claimLoading, error: claimError, success: claimSuccess } = useSelector((state) => state.achievementClaims)
     const { user } = useSelector((state) => state.auth)
+    const [selectedChallenge, setSelectedChallenge] = useState(null)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         // Check if user is authenticated
@@ -57,19 +64,35 @@ function P_ViewChallenge() {
             return
         }
 
-        // Fetch challenge and leaderboard data
-        Promise.all([
-            dispatch(getChallenge(challengeId)),
-            dispatch(getChallenges()),
-            dispatch(getLeaderboard(challengeId)),
-            dispatch(getChallengeResources(challengeId))
-        ]).catch(error => {
-            console.error('Error fetching data:', error)
-        })
+        // Fetch challenge data
+        dispatch(getChallenge(challengeId))
+            .unwrap()
+            .then((challenge) => {
+                setSelectedChallenge(challenge)
+                // After challenge is fetched, fetch related data
+                dispatch(getLeaderboard(challengeId))
+                dispatch(getChallengeResources(challengeId))
+                dispatch(getChallengeAchievements(challengeId))
+            })
+            .catch((error) => {
+                console.error('Error fetching challenge data:', error)
+                setError(error)
+            })
     }, [dispatch, navigate, user])
 
-    // Show loading state while fetching data
-    if (challengeLoading || !challenge) {
+    const handleClaimAchievement = async (achievementId) => {
+        try {
+            const challengeId = localStorage.getItem('selectedChallengeId')
+            await dispatch(claimAchievement({ achievementId, challengeId })).unwrap()
+            // Refresh leaderboard data after claiming
+            dispatch(getLeaderboard(challengeId))
+        } catch (error) {
+            console.error('Error claiming achievement:', error)
+        }
+    }
+
+    // Show loading state only while initially fetching challenge data
+    if (challengesLoading && !selectedChallenge) {
         return (
             <Box sx={{ 
                 display: 'flex', 
@@ -86,7 +109,7 @@ function P_ViewChallenge() {
     }
 
     // Show error state if there's an error
-    if (challengeError) {
+    if (error || !selectedChallenge) {
         return (
             <Box sx={{ 
                 display: 'flex', 
@@ -97,7 +120,7 @@ function P_ViewChallenge() {
                 gap: 2
             }}>
                 <Alert severity="error" sx={{ mb: 2 }}>
-                    {challengeMessage || 'Error loading challenge details'}
+                    {error || 'Error loading challenge details'}
                 </Alert>
                 <IconButton 
                     onClick={() => navigate('/participant-dashboard')} 
@@ -135,7 +158,7 @@ function P_ViewChallenge() {
                 mt: 4,
                 textAlign: 'center'
             }}>
-                {challenge.name}
+                {selectedChallenge.name}
             </Typography>
 
             <Box sx={{ 
@@ -172,37 +195,85 @@ function P_ViewChallenge() {
                                 <ListItem>
                                     <ListItemText 
                                         primary="Description" 
-                                        secondary={challenge.description}
+                                        secondary={selectedChallenge.description}
                                     />
                                 </ListItem>
                                 <Divider />
                                 <ListItem>
                                     <ListItemText 
                                         primary="Type" 
-                                        secondary={challenge.type}
+                                        secondary={selectedChallenge.type}
                                     />
                                 </ListItem>
                                 <Divider />
                                 <ListItem>
                                     <ListItemText 
                                         primary="Goal" 
-                                        secondary={challenge.goal}
+                                        secondary={selectedChallenge.goal}
                                     />
                                 </ListItem>
                                 <Divider />
                                 <ListItem>
                                     <ListItemText 
                                         primary="Frequency" 
-                                        secondary={challenge.frequency}
+                                        secondary={selectedChallenge.frequency}
                                     />
                                 </ListItem>
                                 <Divider />
                                 <ListItem>
                                     <ListItemText 
                                         primary="Date Range" 
-                                        secondary={`${new Date(challenge.startDate).toLocaleDateString()} to ${new Date(challenge.endDate).toLocaleDateString()}`}
+                                        secondary={`${new Date(selectedChallenge.startDate).toLocaleDateString()} to ${new Date(selectedChallenge.endDate).toLocaleDateString()}`}
                                     />
                                 </ListItem>
+                                <Divider />
+                                <ListItem>
+                                    <Typography variant="subtitle1" sx={{ color: '#283D3B', fontWeight: 'bold' }}>
+                                        Achievements
+                                    </Typography>
+                                </ListItem>
+                                {achievementsLoading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                                        <CircularProgress />
+                                    </Box>
+                                ) : achievements && achievements.length > 0 ? (
+                                    achievements.map((achievement) => (
+                                        <React.Fragment key={achievement._id}>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={achievement.title}
+                                                    secondary={`${achievement.points} points • ${achievement.refreshTime}`}
+                                                />
+                                                <Button
+                                                    variant="contained"
+                                                    color="success"
+                                                    size="small"
+                                                    startIcon={<FaCheck />}
+                                                    onClick={() => handleClaimAchievement(achievement._id)}
+                                                    disabled={claimLoading}
+                                                    sx={{
+                                                        minWidth: 'auto',
+                                                        px: 1,
+                                                        backgroundColor: '#4CAF50',
+                                                        '&:hover': {
+                                                            backgroundColor: '#45a049'
+                                                        }
+                                                    }}
+                                                >
+                                                    Claim
+                                                </Button>
+                                            </ListItem>
+                                            <Divider />
+                                        </React.Fragment>
+                                    ))
+                                ) : (
+                                    <ListItem>
+                                        <ListItemText
+                                            primary="No achievements yet"
+                                            sx={{ fontStyle: 'italic' }}
+                                        />
+                                    </ListItem>
+                                )}
                             </List>
                         </Paper>
                     </Grid>
@@ -211,7 +282,7 @@ function P_ViewChallenge() {
                     <Grid item>
                         <Paper 
                             onClick={() => {
-                                localStorage.setItem('selectedChallengeId', challenge._id)
+                                localStorage.setItem('selectedChallengeId', selectedChallenge._id)
                                 navigate('/leaderboard')
                             }}
                             sx={{ 
