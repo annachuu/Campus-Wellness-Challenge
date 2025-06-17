@@ -22,6 +22,7 @@ import Leaderboard from './pages/B_Leaderboard'
 import UploadResource from './pages/C_UploadResource'
 import EnrollParticipant from './pages/C_Enroll.jsx'
 import C_ChallengeDetail from './pages/C_ChallengeDetail'
+import Forum from './pages/B_Forum'
 
 // Logged in users
 import PrivateRoute from './components/PrivateRoute'
@@ -123,6 +124,15 @@ function App() {
                 <C_ChallengeDetail />
               </RoleRoute>
             } />
+
+            <Route path='/forum' element={
+              <RoleRoute allowedRoles={['participant', 'coordinator']}>
+                <Forum />
+              </RoleRoute>
+            }
+              
+            />
+
           </Routes>
         </div>
       </Router>

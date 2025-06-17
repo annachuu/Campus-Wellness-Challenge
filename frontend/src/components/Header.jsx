@@ -23,6 +23,7 @@ import '../styles/pages.css'
 import logo from '../images/logo.png'
 import HomeIcon from '@mui/icons-material/Home';
 import FlagIcon from '@mui/icons-material/Flag';
+import ForumIcon from '@mui/icons-material/Forum';
 
 function Header() {
     const navigate = useNavigate()
@@ -73,9 +74,10 @@ function Header() {
                                     Leaderboard
                                 </Link>
 
-                                {/* <Link tp='/forum' className='header-button'>                        // ENABLE IN PHASE 2
+                                <Link tp='/forum' className='header-button'>
+                                    <ForumIcon style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 16}} />
                                     Forum
-                                </Link> */}
+                                </Link>
 
                                 <Button
                                     component={Link}
