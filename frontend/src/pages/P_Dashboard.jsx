@@ -145,6 +145,9 @@ function P_Dashboard() {
                                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                                     Frequency: {challenge.frequency}
                                                 </Typography>
+                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    Participants: {challenge.participantCount || 0}
+                                                </Typography>
                                             </Box>
                                             <Divider sx={{ my: 1 }} />
                                             <Typography variant="caption" color="text.secondary">

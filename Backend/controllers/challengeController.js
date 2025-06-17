@@ -37,8 +37,24 @@ const createChallenge = asyncHandler(async (req, res) => {
 // @route   GET /api/challenges
 // @access  Private
 const getChallenges = asyncHandler(async (req, res) => {
+    // Get all challenges created by this coordinator
     const challenges = await Challenge.find({ createdBy: req.user.id })
-    res.status(200).json(challenges)
+    
+    // Get participant counts for each challenge
+    const challengesWithParticipants = await Promise.all(challenges.map(async (challenge) => {
+        // Count participants in the leaderboard for this challenge
+        const participantCount = await Leaderboard.countDocuments({ 
+            challenge: challenge._id 
+        })
+        
+        // Convert challenge to plain object and add participant count
+        const challengeObj = challenge.toObject()
+        challengeObj.participantCount = participantCount
+        
+        return challengeObj
+    }))
+
+    res.status(200).json(challengesWithParticipants)
 })
 
 // @desc    Get single challenge
@@ -54,7 +70,15 @@ const getChallenge = asyncHandler(async (req, res) => {
 
     // Check if user is the coordinator who created the challenge
     if (challenge.createdBy.toString() === req.user.id) {
-        return res.status(200).json(challenge)
+        // Get participant count for this challenge
+        const participantCount = await Leaderboard.countDocuments({ 
+            challenge: challenge._id 
+        })
+        
+        const challengeObj = challenge.toObject()
+        challengeObj.participantCount = participantCount
+        
+        return res.status(200).json(challengeObj)
     }
 
     // If not the coordinator, check if user is a participant enrolled in the challenge
@@ -68,7 +92,15 @@ const getChallenge = asyncHandler(async (req, res) => {
         throw new Error('Not authorized to view this challenge')
     }
 
-    res.status(200).json(challenge)
+    // Get participant count for this challenge
+    const participantCount = await Leaderboard.countDocuments({ 
+        challenge: challenge._id 
+    })
+    
+    const challengeObj = challenge.toObject()
+    challengeObj.participantCount = participantCount
+    
+    res.status(200).json(challengeObj)
 })
 
 module.exports = {

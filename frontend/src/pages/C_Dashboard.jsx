@@ -103,6 +103,9 @@ function C_Dashboard() {
                                                     <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
                                                         Frequency: {challenge.frequency}
                                                     </Typography>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                        Participants: {challenge.participantCount || 0}
+                                                    </Typography>
                                                 </Box>
                                                 <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF'}}>
                                                     {new Date(challenge.startDate).toLocaleDateString()} to {new Date(challenge.endDate).toLocaleDateString()}

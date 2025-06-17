@@ -97,20 +97,28 @@ const getParticipantChallenges = async (req, res) => {
             })
         }
 
-        // Format the response to include challenge details and points
-        const challenges = leaderboardEntries
+        // Format the response to include challenge details, points, and participant count
+        const challenges = await Promise.all(leaderboardEntries
             .filter(entry => entry.challenge) // Filter out any entries where challenge population failed
-            .map(entry => ({
-                _id: entry.challenge._id,
-                name: entry.challenge.name,
-                description: entry.challenge.description,
-                type: entry.challenge.type,
-                goal: entry.challenge.goal,
-                frequency: entry.challenge.frequency,
-                startDate: entry.challenge.startDate,
-                endDate: entry.challenge.endDate,
-                status: entry.challenge.status,
-                points: entry.points
+            .map(async entry => {
+                // Get participant count for this challenge
+                const participantCount = await Leaderboard.countDocuments({ 
+                    challenge: entry.challenge._id 
+                })
+
+                return {
+                    _id: entry.challenge._id,
+                    name: entry.challenge.name,
+                    description: entry.challenge.description,
+                    type: entry.challenge.type,
+                    goal: entry.challenge.goal,
+                    frequency: entry.challenge.frequency,
+                    startDate: entry.challenge.startDate,
+                    endDate: entry.challenge.endDate,
+                    status: entry.challenge.status,
+                    points: entry.points,
+                    participantCount
+                }
             }))
 
         console.log('Formatted challenges:', JSON.stringify(challenges, null, 2))
