@@ -16,12 +16,6 @@ import {
   Button,
   Box,
   Icon,
-  Grid,
-  Link,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   List,
   ListItem,
   ListItemText,
@@ -34,6 +28,7 @@ import { FaCloudUploadAlt, FaFile, FaTrash } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { uploadResource } from '../features/resources/resourceSlice'
 import { toast } from 'react-toastify'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
 
 function UploadResource() {
@@ -111,6 +106,11 @@ function UploadResource() {
 
     return (
         <Container component="main" maxWidth="md" className="page-container" sx={{pt: 10}}>
+            {/* Back Arrow */}
+            <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 400}}>
+                <ArrowBackIosNewIcon />
+            </IconButton>
+
             <Paper elevation={3} sx={{p: 4, textAlign: 'center'}}>
                 <Typography variant="h4" gutterBottom>
                     Upload Resource

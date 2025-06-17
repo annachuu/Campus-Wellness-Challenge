@@ -8,8 +8,7 @@
 // */
 
 import React from 'react'
-import { 
-  Container, 
+import {  
   Typography, 
   Button, 
   Box,
@@ -35,7 +34,7 @@ function Logout() {
     }
 
     const handleCancel = () => {
-        navigate('/participant-dashboard')                      //works for coordinator even though says participant?
+        navigate('/participant-dashboard') 
     }
 
     return (

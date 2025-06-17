@@ -19,7 +19,6 @@ import {
     Button,
     Box,
     Divider,
-    Avatar,
     IconButton,
     CircularProgress,
     Alert,

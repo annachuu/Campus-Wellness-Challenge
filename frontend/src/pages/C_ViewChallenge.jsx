@@ -22,8 +22,6 @@ import {
     Divider,
     IconButton,
     Grid,
-    Card,
-    CardContent,
     List,
     ListItem,
     ListItemText,
@@ -31,7 +29,7 @@ import {
     CircularProgress,
     Link
 } from '@mui/material'
-import { FaTrophy, FaComments, FaArrowLeft, FaPlus, FaFile } from 'react-icons/fa'
+import { FaTrophy, FaComments, FaPlus, FaFile } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
 
@@ -74,13 +72,6 @@ function C_ViewChallenge() {
             maxWidth: '1800px !important',
             width: '100%'
         }}>
-            {/* Back Button */}
-            <IconButton 
-                onClick={() => navigate('/coordinator-dashboard')} 
-                sx={{ position: 'absolute', left: 20, top: 20 }}
-            >
-                <FaArrowLeft />
-            </IconButton>
 
             {/* Back Arrow */}
             <IconButton onClick={() => navigate('/coordinator-dashboard')} sx={{position: 'absolute', left: 450, mt: 5}}>

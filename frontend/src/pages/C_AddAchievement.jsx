@@ -24,7 +24,7 @@ import {
     MenuItem,
     IconButton
 } from '@mui/material'
-import { FaArrowLeft } from 'react-icons/fa'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
 
 function C_AddAchievement() {
@@ -88,13 +88,10 @@ function C_AddAchievement() {
     }
 
     return (
-        <Container component="main" className="page-container" sx={{ mt: 5 }}>
-            {/* Back Button */}
-            <IconButton 
-                onClick={() => navigate('/view-challenge')} 
-                sx={{ position: 'absolute', left: 20, top: 20 }}
-            >
-                <FaArrowLeft />
+        <Container component="main" className="page-container" sx={{ mt: 10 }}>
+            {/* Back Arrow */}
+            <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 450}}>
+                <ArrowBackIosNewIcon />
             </IconButton>
 
             <Typography variant="h4" component="h1" gutterBottom sx={{ 
