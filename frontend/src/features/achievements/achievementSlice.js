@@ -37,6 +37,27 @@ export const createAchievement = createAsyncThunk(
     }
 )
 
+// Claim an achievement
+export const claimAchievement = createAsyncThunk(
+    'achievements/claimAchievement',
+    async ({ achievementId, challengeId }, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token
+            const response = await axios.post('/api/achievements/claim', 
+                { achievementId, challengeId },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
+            return response.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data)
+        }
+    }
+)
+
 const initialState = {
     achievements: [],
     loading: false,
@@ -86,6 +107,30 @@ const achievementSlice = createSlice({
                 state.loading = false
                 state.error = action.payload?.message || 'Failed to create achievement'
                 state.success = false
+            })
+            // Claim achievement
+            .addCase(claimAchievement.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(claimAchievement.fulfilled, (state, action) => {
+                state.loading = false
+                // Update the achievement's claim status
+                const achievementIndex = state.achievements.findIndex(
+                    a => a._id === action.meta.arg.achievementId
+                )
+                if (achievementIndex !== -1) {
+                    state.achievements[achievementIndex] = {
+                        ...state.achievements[achievementIndex],
+                        canClaim: false,
+                        lastClaimed: action.payload.lastClaimed
+                    }
+                }
+                state.error = null
+            })
+            .addCase(claimAchievement.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || 'Failed to claim achievement'
             })
     }
 })

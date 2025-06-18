@@ -26,16 +26,32 @@ import {
 import { FaUser, FaPlus, FaUserPlus, FaTrophy } from 'react-icons/fa'
 import '../styles/pages.css'
 import { getChallenges } from '../features/challenges/challengeSlice'
+import { getChallengeAchievements } from '../features/achievements/achievementSlice'
 
 function C_Dashboard() {
     const { user } = useSelector((state) => state.auth)
     const { challenges } = useSelector((state) => state.challenge)
+    const { achievements } = useSelector((state) => state.achievements)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getChallenges())
     }, [dispatch])
+
+    // Get all achievements from all challenges
+    useEffect(() => {
+        if (challenges && challenges.length > 0) {
+            challenges.forEach(challenge => {
+                dispatch(getChallengeAchievements(challenge._id))
+            })
+        }
+    }, [challenges, dispatch])
+
+    // Get the 3 most recent achievements
+    const recentAchievements = achievements
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 3)
 
     const handleChallengeClick = (challengeId) => {
         localStorage.setItem('selectedChallengeId', challengeId)
@@ -133,6 +149,53 @@ function C_Dashboard() {
                             <Grid item xs={12}>
                                 <Typography variant="body1" color="text.secondary" align="center">
                                     No challenges created yet. Click the button below to create your first challenge!
+                                </Typography>
+                            </Grid>
+                        )}
+                    </Grid>
+                </Box>
+
+                {/* Recent Achievements Section */}
+                <Box sx={{ mb: 4 }}>
+                    <Typography variant="h6" component="h2" sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: 1,
+                        color: '#795663',
+                        mb: 2
+                    }}>
+                        <FaTrophy />
+                        Recent Achievements
+                    </Typography>
+                    <Grid container spacing={2}>
+                        {recentAchievements.length > 0 ? (
+                            recentAchievements.map((achievement) => (
+                                <Grid item xs={12} sm={4} key={achievement._id}>
+                                    <Card sx={{ 
+                                        backgroundColor: '#d9bcaf',
+                                        height: '100%'
+                                    }}>
+                                        <CardContent>
+                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                {achievement.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
+                                                {achievement.points} points
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}}>
+                                                Refresh: {achievement.refreshTime}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF', mt: 1 }}>
+                                                Created: {new Date(achievement.createdAt).toLocaleDateString()}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))
+                        ) : (
+                            <Grid item xs={12}>
+                                <Typography variant="body1" color="text.secondary" align="center">
+                                    No achievements created yet. Create a challenge and add achievements to see them here!
                                 </Typography>
                             </Grid>
                         )}

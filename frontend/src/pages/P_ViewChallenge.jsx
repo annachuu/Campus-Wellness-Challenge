@@ -13,8 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getChallenge, getChallenges } from '../features/challenges/challengeSlice'
 import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
-import { getChallengeAchievements } from '../features/achievements/achievementSlice'
-import { claimAchievement } from '../features/achievements/achievementClaimSlice'
+import { getChallengeAchievements, claimAchievement } from '../features/achievements/achievementSlice'
 import { getForumPosts, likePost } from '../features/forum/forumSlice'
 import {
     Container,
@@ -256,39 +255,45 @@ function P_ViewChallenge() {
                                     </Box>
                                 ) : achievements && achievements.length > 0 ? (
                                     achievements.map((achievement) => (
-                                        <React.Fragment key={achievement._id}>
-                                            <ListItem>
-                                                <ListItemText
-                                                    primary={achievement.title}
-                                                    secondary={`${achievement.points} points • ${achievement.refreshTime}`}
-                                                />
-                                                <Button
-                                                    variant="contained"
-                                                    color="success"
-                                                    size="small"
-                                                    startIcon={<FaCheck />}
-                                                    onClick={() => handleClaimAchievement(achievement._id)}
-                                                    disabled={claimLoading}
-                                                    sx={{
-                                                        minWidth: 'auto',
-                                                        px: 1,
-                                                        backgroundColor: '#4CAF50',
-                                                        '&:hover': {
-                                                            backgroundColor: '#45a049'
-                                                        }
-                                                    }}
-                                                >
-                                                    Claim
-                                                </Button>
-                                            </ListItem>
-                                            <Divider />
-                                        </React.Fragment>
+                                        <ListItem key={achievement._id}>
+                                            <ListItemText
+                                                primary={achievement.title}
+                                                secondary={
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <Typography variant="body2">
+                                                            {achievement.points} points • {achievement.refreshTime}
+                                                        </Typography>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                            {achievement.lastClaimed && (
+                                                                <Typography variant="caption" color="text.secondary">
+                                                                    Last claimed: {new Date(achievement.lastClaimed).toLocaleDateString()}
+                                                                </Typography>
+                                                            )}
+                                                            <Button
+                                                                variant="contained"
+                                                                size="small"
+                                                                onClick={() => handleClaimAchievement(achievement._id)}
+                                                                disabled={!achievement.canClaim || claimLoading}
+                                                                sx={{
+                                                                    backgroundColor: achievement.canClaim ? '#795663' : 'grey.400',
+                                                                    '&:hover': {
+                                                                        backgroundColor: achievement.canClaim ? '#5c3f4a' : 'grey.400'
+                                                                    }
+                                                                }}
+                                                            >
+                                                                {claimLoading ? <CircularProgress size={20} /> : 'Claim'}
+                                                            </Button>
+                                                        </Box>
+                                                    </Box>
+                                                }
+                                            />
+                                        </ListItem>
                                     ))
                                 ) : (
                                     <ListItem>
-                                        <ListItemText
-                                            primary="No achievements yet"
-                                            sx={{ fontStyle: 'italic' }}
+                                        <ListItemText 
+                                            primary="No achievements available"
+                                            secondary="Check back later for new achievements"
                                         />
                                     </ListItem>
                                 )}

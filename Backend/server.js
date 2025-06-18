@@ -40,6 +40,7 @@ app.use('/api/challenges', challengeRoutes)
 app.use('/api/leaderboard', leaderboardRoutes)
 app.use('/api/resources', resourceRoutes)
 app.use('/api/forum', forumRoutes)
+app.use('/api/achievements', achievementRoutes)
 
 // Error handler
 app.use(errorHandler)
