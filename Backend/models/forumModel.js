@@ -25,8 +25,7 @@ const forumPostSchema = mongoose.Schema({
         ref: 'Challenge'
     },
     likes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: 'userRole'
+        type: mongoose.Schema.Types.ObjectId
     }]
 }, {
     timestamps: true

@@ -62,7 +62,6 @@ const createPosts = asyncHandler(async (req, res) => {
 const likePosts = asyncHandler(async (req, res) => {
     console.log('Like request for post:', req.params.id) // Debug log
     console.log('User ID:', req.user._id) // Debug log
-    console.log('User role:', req.user.role) // Debug log
 
     const post = await ForumPost.findById(req.params.id)
 

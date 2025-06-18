@@ -98,7 +98,12 @@ function P_ViewChallenge() {
     const handleLike = async (postId, e) => {
         e.stopPropagation() // Prevent navigation to forum page
         try {
-            await dispatch(likePost(postId)).unwrap()
+            console.log('Liking post:', postId) // Debug log
+            console.log('Current user:', user) // Debug log
+            const result = await dispatch(likePost(postId)).unwrap()
+            console.log('Like result:', result) // Debug log
+            // Refresh posts after liking
+            dispatch(getForumPosts(selectedChallenge._id))
         } catch (error) {
             console.error('Error liking post:', error)
         }
@@ -492,40 +497,64 @@ function P_ViewChallenge() {
                                         <CircularProgress />
                                     </Box>
                                 ) : posts && posts.length > 0 ? (
-                                    posts.slice(0, 5).map((post) => (
-                                        <React.Fragment key={post._id}>
-                                            <ListItem>
-                                                <ListItemText
-                                                    primary={
-                                                        <Typography 
-                                                            variant="body1" 
-                                                            sx={{ 
-                                                                overflow: 'hidden',
-                                                                textOverflow: 'ellipsis',
-                                                                display: '-webkit-box',
-                                                                WebkitLineClamp: 2,
-                                                                WebkitBoxOrient: 'vertical',
-                                                                mb: 1
-                                                            }}
-                                                        >
-                                                            {post.content}
-                                                        </Typography>
-                                                    }
-                                                    secondary={
-                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                            <Typography variant="body2">
-                                                                {post.userName}
+                                    posts.slice(0, 5).map((post) => {
+                                        console.log('Post data:', post) // Debug log
+                                        const isLiked = post.likes?.some(like => like.toString() === user._id)
+                                        console.log('Is liked:', isLiked) // Debug log
+                                        return (
+                                            <React.Fragment key={post._id}>
+                                                <ListItem>
+                                                    <ListItemText
+                                                        primary={
+                                                            <Typography 
+                                                                variant="body1" 
+                                                                sx={{ 
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    display: '-webkit-box',
+                                                                    WebkitLineClamp: 2,
+                                                                    WebkitBoxOrient: 'vertical',
+                                                                    mb: 1
+                                                                }}
+                                                            >
+                                                                {post.content}
                                                             </Typography>
-                                                            <Typography variant="body2">
-                                                                {new Date(post.createdAt).toLocaleDateString()}
-                                                            </Typography>
-                                                        </Box>
-                                                    }
-                                                />
-                                            </ListItem>
-                                            <Divider />
-                                        </React.Fragment>
-                                    ))
+                                                        }
+                                                        secondary={
+                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                <Typography variant="body2">
+                                                                    {post.userName}
+                                                                </Typography>
+                                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                                    <Typography variant="body2">
+                                                                        {new Date(post.createdAt).toLocaleDateString()}
+                                                                    </Typography>
+                                                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                                        <IconButton 
+                                                                            size="small" 
+                                                                            onClick={(e) => handleLike(post._id, e)}
+                                                                            sx={{ 
+                                                                                color: isLiked ? '#795663' : 'inherit',
+                                                                                '&:hover': {
+                                                                                    color: '#795663'
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            <FavoriteIcon />
+                                                                        </IconButton>
+                                                                        <Typography variant="caption" sx={{ mt: -0.5 }}>
+                                                                            {post.likes?.length || 0}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </Box>
+                                                            </Box>
+                                                        }
+                                                    />
+                                                </ListItem>
+                                                <Divider />
+                                            </React.Fragment>
+                                        )
+                                    })
                                 ) : (
                                     <ListItem>
                                         <ListItemText 

@@ -27,7 +27,7 @@ import {
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import '../styles/pages.css'
-import { createPost, getForumPosts } from '../features/forum/forumSlice'
+import { createPost, getForumPosts, likePost } from '../features/forum/forumSlice'
 
 function Forum() {
     const { user } = useSelector((state) => state.auth)
@@ -67,6 +67,20 @@ function Forum() {
         } catch (error) {
             console.error('Error creating post:', error) // Debug log
             setError(error.message || 'Failed to create post')
+        }
+    }
+
+    const handleLike = async (postId, e) => {
+        e.stopPropagation()
+        try {
+            console.log('Liking post:', postId) // Debug log
+            console.log('Current user:', user) // Debug log
+            const result = await dispatch(likePost(postId)).unwrap()
+            console.log('Like result:', result) // Debug log
+            // Refresh posts after liking
+            dispatch(getForumPosts(challengeId))
+        } catch (error) {
+            console.error('Error liking post:', error)
         }
     }
 
@@ -135,31 +149,50 @@ function Forum() {
                     <CircularProgress />
                 </Box>
             ) : posts && posts.length > 0 ? (
-                posts.map((post) => (
-                    <Paper key={post._id} sx={{ p: 3, mb: 3, width: 700 }}>
-                        <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-                            <Box textAlign="center">
-                                <Avatar sx={{backgroundColor: '#795663'}}>
-                                    {post.userName?.[0] || '?'}
-                                </Avatar>
-                                <Typography variant="caption">{post.userName}</Typography>
-                            </Box>
-                            <Box sx={{ flexGrow: 1 }}>
-                                <Typography variant="body1" paragraph>
-                                    {post.content}
-                                </Typography>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        {new Date(post.createdAt).toLocaleDateString()}
+                posts.map((post) => {
+                    console.log('Post data:', post) // Debug log
+                    const isLiked = post.likes?.some(like => like.toString() === user._id)
+                    console.log('Is liked:', isLiked) // Debug log
+                    return (
+                        <Paper key={post._id} sx={{ p: 3, mb: 3, width: 700 }}>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                                <Box textAlign="center">
+                                    <Avatar sx={{backgroundColor: '#795663'}}>
+                                        {post.userName?.[0] || '?'}
+                                    </Avatar>
+                                    <Typography variant="caption">{post.userName}</Typography>
+                                </Box>
+                                <Box sx={{ flexGrow: 1 }}>
+                                    <Typography variant="body1" paragraph>
+                                        {post.content}
                                     </Typography>
-                                    <IconButton size="small" key={`like-${post._id}`}>
-                                        <FavoriteIcon />
-                                    </IconButton>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {new Date(post.createdAt).toLocaleDateString()}
+                                        </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <IconButton 
+                                                size="small" 
+                                                onClick={(e) => handleLike(post._id, e)}
+                                                sx={{ 
+                                                    color: isLiked ? '#795663' : 'inherit',
+                                                    '&:hover': {
+                                                        color: '#795663'
+                                                    }
+                                                }}
+                                            >
+                                                <FavoriteIcon />
+                                            </IconButton>
+                                            <Typography variant="caption">
+                                                {post.likes?.length || 0}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-                    </Paper>
-                ))
+                        </Paper>
+                    )
+                })
             ) : (
                 <Typography variant="body1" sx={{ textAlign: 'center', mt: 2 }}>
                     No posts yet. Be the first to start a discussion!
