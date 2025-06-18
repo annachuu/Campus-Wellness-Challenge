@@ -15,6 +15,7 @@ import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
 import { getChallengeAchievements } from '../features/achievements/achievementSlice'
 import { claimAchievement } from '../features/achievements/achievementClaimSlice'
+import { getForumPosts } from '../features/forum/forumSlice'
 import {
     Container,
     Paper,
@@ -44,6 +45,7 @@ function P_ViewChallenge() {
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const { loading: claimLoading, error: claimError, success: claimSuccess } = useSelector((state) => state.achievementClaims)
     const { user } = useSelector((state) => state.auth)
+    const { posts, isLoading: forumLoading } = useSelector((state) => state.forum)
     const [selectedChallenge, setSelectedChallenge] = useState(null)
     const [error, setError] = useState(null)
 
@@ -73,6 +75,7 @@ function P_ViewChallenge() {
                 dispatch(getLeaderboard(challengeId))
                 dispatch(getChallengeResources(challengeId))
                 dispatch(getChallengeAchievements(challengeId))
+                dispatch(getForumPosts(challengeId))
             })
             .catch((error) => {
                 console.error('Error fetching challenge data:', error)
@@ -426,15 +429,27 @@ function P_ViewChallenge() {
                         </Paper>
                     </Grid>
 
-                    {/* Bottom Right - Forum */}
+                    {/* Bottom Right - Forum Posts */}
                     <Grid item>
-                        <Paper sx={{ 
-                            p: 2, 
-                            height: '100%',
-                            aspectRatio: '1/1',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
+                        <Paper 
+                            onClick={() => {
+                                localStorage.setItem('selectedChallengeId', selectedChallenge._id)
+                                navigate('/forum')
+                            }}
+                            sx={{ 
+                                p: 2, 
+                                height: '100%',
+                                aspectRatio: '1/1',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 3
+                                }
+                            }}
+                        >
                             <Typography variant="h6" component="h2" gutterBottom sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -444,11 +459,58 @@ function P_ViewChallenge() {
                                 <FaComments />
                                 Forum Posts
                             </Typography>
-                            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Typography variant="body2" color="text.secondary">
-                                    Forum discussions will be displayed here
-                                </Typography>
-                            </Box>
+                            <List sx={{ 
+                                flexGrow: 1, 
+                                overflow: 'auto',
+                                '&::-webkit-scrollbar': {
+                                    width: '8px',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    background: '#f1f1f1',
+                                    borderRadius: '4px',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    background: '#888',
+                                    borderRadius: '4px',
+                                    '&:hover': {
+                                        background: '#555',
+                                    },
+                                },
+                            }}>
+                                {forumLoading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                                        <CircularProgress />
+                                    </Box>
+                                ) : posts && posts.length > 0 ? (
+                                    posts.slice(0, 5).map((post) => (
+                                        <React.Fragment key={post._id}>
+                                            <ListItem>
+                                                <ListItemText
+                                                    primary={post.title}
+                                                    secondary={
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                            <Typography variant="body2">
+                                                                {post.userName}
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                {new Date(post.createdAt).toLocaleDateString()}
+                                                            </Typography>
+                                                        </Box>
+                                                    }
+                                                />
+                                            </ListItem>
+                                            <Divider />
+                                        </React.Fragment>
+                                    ))
+                                ) : (
+                                    <ListItem>
+                                        <ListItemText 
+                                            primary="No posts yet"
+                                            secondary="Be the first to start a discussion"
+                                        />
+                                    </ListItem>
+                                )}
+                            </List>
                         </Paper>
                     </Grid>
                 </Grid>

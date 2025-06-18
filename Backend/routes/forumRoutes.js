@@ -6,7 +6,7 @@ const { protect } = require('../middleware/authMiddleware')
 
 router.route('/')
     .post(protect, createPosts)
-    .get(getPosts)
+    .get(protect, getPosts)
 
 router.patch('/:id/like', protect, likePosts)
 

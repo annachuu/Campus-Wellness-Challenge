@@ -39,6 +39,7 @@ app.use('/api/coordinators', coordinatorRoutes)
 app.use('/api/challenges', challengeRoutes)
 app.use('/api/leaderboard', leaderboardRoutes)
 app.use('/api/resources', resourceRoutes)
+app.use('/api/forum', forumRoutes)
 
 // Error handler
 app.use(errorHandler)

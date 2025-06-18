@@ -7,6 +7,7 @@ import participantChallengesReducer from '../features/participantChallenges/part
 import resourceReducer from '../features/resources/resourceSlice'
 import achievementReducer from '../features/achievements/achievementSlice'
 import achievementClaimReducer from '../features/achievements/achievementClaimSlice'
+import forumReducer from '../features/forum/forumSlice'
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     participantChallenges: participantChallengesReducer,
     resources: resourceReducer,
     achievements: achievementReducer,
-    achievementClaims: achievementClaimReducer
+    achievementClaims: achievementClaimReducer,
+    forum: forumReducer
   },
 });
