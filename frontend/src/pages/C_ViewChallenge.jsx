@@ -14,6 +14,7 @@ import { getChallenges } from '../features/challenges/challengeSlice'
 import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
 import { getChallengeAchievements } from '../features/achievements/achievementSlice'
+import { getForumPosts, likePost } from '../features/forum/forumSlice'
 import {
     Container,
     Paper,
@@ -32,6 +33,7 @@ import {
 import { FaTrophy, FaComments, FaPlus, FaFile } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 
 function C_ViewChallenge() {
     const navigate = useNavigate()
@@ -40,7 +42,10 @@ function C_ViewChallenge() {
     const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
+    const { posts, isLoading: forumLoading } = useSelector((state) => state.forum)
+    const { user } = useSelector((state) => state.auth)
     const [selectedChallenge, setSelectedChallenge] = useState(null)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         dispatch(getChallenges())
@@ -58,9 +63,24 @@ function C_ViewChallenge() {
                 dispatch(getLeaderboard(challenge._id))
                 dispatch(getChallengeResources(challenge._id))
                 dispatch(getChallengeAchievements(challenge._id))
+                dispatch(getForumPosts(challenge._id))
             }
         }
     }, [dispatch, challenges])
+
+    const handleLike = async (postId, e) => {
+        e.stopPropagation() // Prevent navigation to forum page
+        try {
+            console.log('Liking post:', postId) // Debug log
+            console.log('Current user:', user) // Debug log
+            const result = await dispatch(likePost(postId)).unwrap()
+            console.log('Like result:', result) // Debug log
+            // Refresh posts after liking
+            dispatch(getForumPosts(selectedChallenge._id))
+        } catch (error) {
+            console.error('Error liking post:', error)
+        }
+    }
 
     if (!challenges || challengesLoading || !selectedChallenge) {
         return <div>Loading...</div>
@@ -363,15 +383,27 @@ function C_ViewChallenge() {
                         </Paper>
                     </Grid>
 
-                    {/* Bottom Right - Forum */}
+                    {/* Bottom Right - Forum Posts */}
                     <Grid item>
-                        <Paper sx={{ 
-                            p: 2, 
-                            height: '100%',
-                            aspectRatio: '1/1',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
+                        <Paper 
+                            onClick={() => {
+                                localStorage.setItem('selectedChallengeId', selectedChallenge._id)
+                                navigate('/forum')
+                            }}
+                            sx={{ 
+                                p: 2, 
+                                height: '100%',
+                                aspectRatio: '1/1',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                cursor: 'pointer',
+                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 3
+                                }
+                            }}
+                        >
                             <Typography variant="h6" component="h2" gutterBottom sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -381,11 +413,96 @@ function C_ViewChallenge() {
                                 <FaComments />
                                 Forum Posts
                             </Typography>
-                            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Typography variant="body2" color="text.secondary">
-                                    Forum discussions will be displayed here
-                                </Typography>
-                            </Box>
+                            <List sx={{ 
+                                flexGrow: 1, 
+                                overflow: 'auto',
+                                '&::-webkit-scrollbar': {
+                                    width: '8px',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    background: '#f1f1f1',
+                                    borderRadius: '4px',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    background: '#888',
+                                    borderRadius: '4px',
+                                    '&:hover': {
+                                        background: '#555',
+                                    },
+                                },
+                            }}>
+                                {forumLoading ? (
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                                        <CircularProgress />
+                                    </Box>
+                                ) : posts && posts.length > 0 ? (
+                                    posts.slice(0, 5).map((post) => {
+                                        console.log('Post data:', post) // Debug log
+                                        const isLiked = post.likes?.some(like => like.toString() === user._id)
+                                        console.log('Is liked:', isLiked) // Debug log
+                                        return (
+                                            <React.Fragment key={post._id}>
+                                                <ListItem>
+                                                    <ListItemText
+                                                        primary={
+                                                            <Typography 
+                                                                variant="body1" 
+                                                                sx={{ 
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                    display: '-webkit-box',
+                                                                    WebkitLineClamp: 2,
+                                                                    WebkitBoxOrient: 'vertical',
+                                                                    mb: 1
+                                                                }}
+                                                            >
+                                                                {post.content}
+                                                            </Typography>
+                                                        }
+                                                        secondary={
+                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                <Typography variant="body2">
+                                                                    {post.userName}
+                                                                </Typography>
+                                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                                    <Typography variant="body2">
+                                                                        {new Date(post.createdAt).toLocaleDateString()}
+                                                                    </Typography>
+                                                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                                        <IconButton 
+                                                                            size="small" 
+                                                                            onClick={(e) => handleLike(post._id, e)}
+                                                                            sx={{ 
+                                                                                color: isLiked ? '#795663' : 'inherit',
+                                                                                '&:hover': {
+                                                                                    color: '#795663'
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            <FavoriteIcon />
+                                                                        </IconButton>
+                                                                        <Typography variant="caption" sx={{ mt: -0.5 }}>
+                                                                            {post.likes?.length || 0}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </Box>
+                                                            </Box>
+                                                        }
+                                                    />
+                                                </ListItem>
+                                                <Divider />
+                                            </React.Fragment>
+                                        )
+                                    })
+                                ) : (
+                                    <ListItem>
+                                        <ListItemText 
+                                            primary="No posts yet"
+                                            secondary="Be the first to start a discussion"
+                                        />
+                                    </ListItem>
+                                )}
+                            </List>
                         </Paper>
                     </Grid>
                 </Grid>

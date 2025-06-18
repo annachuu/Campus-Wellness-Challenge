@@ -9,19 +9,23 @@ const forumPostSchema = mongoose.Schema({
     userRole: {
         type: String,
         required: true,
-        enum:['Participant', 'Coordinator']
+        enum: ['Participant', 'Coordinator']
     },
     userName: {
         type: String,
         required: true
     },
-    text: {
+    content: {
         type: String,
         required: true
     },
-    likes: [{
+    challenge: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Participant'
+        required: true,
+        ref: 'Challenge'
+    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId
     }]
 }, {
     timestamps: true

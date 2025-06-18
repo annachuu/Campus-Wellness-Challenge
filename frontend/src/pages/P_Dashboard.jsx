@@ -11,6 +11,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getParticipantChallenges } from '../features/participantChallenges/participantChallengesSlice'
+import { getChallengeAchievements } from '../features/achievements/achievementSlice'
 import {
     Container,
     Paper,
@@ -30,12 +31,35 @@ function P_Dashboard() {
     const navigate = useNavigate()
     const { user } = useSelector((state) => state.auth)
     const { challenges, isLoading, error } = useSelector((state) => state.participantChallenges)
+    const { achievements } = useSelector((state) => state.achievements)
     const dispatch = useDispatch()
 
     useEffect(() => {
         console.log('Fetching participant challenges...')
         dispatch(getParticipantChallenges())
     }, [dispatch])
+
+    // Get achievements from all enrolled challenges
+    useEffect(() => {
+        if (challenges && challenges.length > 0) {
+            challenges.forEach(challenge => {
+                dispatch(getChallengeAchievements(challenge._id))
+            })
+        }
+    }, [challenges, dispatch])
+
+    // Get the 3 most recent achievements from enrolled challenges only
+    const recentAchievements = [...achievements]
+        .filter(achievement => 
+            challenges.some(challenge => challenge._id === achievement.challenge) &&
+            achievement.lastClaimed // Only show achievements that have been claimed
+        )
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        .slice(0, 3)
+
+    console.log('Enrolled challenges:', challenges) // Debug log
+    console.log('All achievements:', achievements) // Debug log
+    console.log('Filtered achievements:', recentAchievements) // Debug log
 
     useEffect(() => {
         console.log('Current challenges state:', challenges)
@@ -47,22 +71,6 @@ function P_Dashboard() {
         localStorage.setItem('selectedChallengeId', challengeId)
         navigate('/participant/view-challenge')
     }
-
-    // Mock data for achievements
-    const achievements = [
-        {
-            id: 1,
-            name: 'First Steps',
-            description: 'Completed your first challenge',
-            date: '2024-03-15'
-        },
-        {
-            id: 2,
-            name: 'Consistency King',
-            description: 'Logged in for 7 consecutive days',
-            date: '2024-03-20'
-        }
-    ]
 
     return (
         <Container component="main" maxWidth="md" className="page-container" sx={{mt: 10}}>
@@ -174,26 +182,49 @@ function P_Dashboard() {
                         color: '#795663'
                     }}>
                         <FaMedal />
-                        Achievements
+                        Recent Achievements
                     </Typography>
-                    <Grid container spacing={2}>
-                        {achievements.map((achievement) => (
-                            <Grid item xs={12} sm={6} key={achievement.id}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6" component="h3" gutterBottom>
-                                            {achievement.name}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary" paragraph>
-                                            {achievement.description}
-                                        </Typography>
-                                        <Typography variant="caption" color="text.secondary">
-                                            Earned on {achievement.date}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                    <Grid container spacing={3} sx={{ width: '100%', margin: 0 }}>
+                        {recentAchievements.length > 0 ? (
+                            recentAchievements.map((achievement) => (
+                                <Grid item xs={12} sm={6} md={4} key={achievement._id} sx={{ 
+                                    display: 'flex',
+                                    minWidth: 0 // Prevent overflow
+                                }}>
+                                    <Card sx={{ 
+                                        width: '100%',
+                                        backgroundColor: '#795663',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '100%' // Ensure consistent height
+                                    }}>
+                                        <CardContent sx={{ flexGrow: 1 }}>
+                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                {achievement.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
+                                                {achievement.points} points
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}}>
+                                                Refresh: {achievement.refreshTime}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mt: 1 }}>
+                                                Challenge: {challenges.find(c => c._id === achievement.challenge)?.name || 'Unknown Challenge'}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF', mt: 1 }}>
+                                                Created: {new Date(achievement.createdAt).toLocaleDateString()}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))
+                        ) : (
+                            <Grid item xs={12}>
+                                <Typography variant="body1" color="text.secondary" align="center">
+                                    No achievements available yet. Join a challenge to see achievements!
+                                </Typography>
                             </Grid>
-                        ))}
+                        )}
                     </Grid>
                 </Box>
             </Paper>
