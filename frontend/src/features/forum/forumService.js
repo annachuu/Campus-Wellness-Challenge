@@ -29,9 +29,22 @@ const createPost = async (postData, token) => {
     return response.data
 }
 
+// Like/Unlike post
+const likePost = async (postId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.patch(`${API_URL}/${postId}/like`, {}, config)
+    return response.data
+}
+
 const forumService = {
     getPosts,
-    createPost
+    createPost,
+    likePost
 }
 
 export default forumService 

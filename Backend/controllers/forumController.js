@@ -60,6 +60,10 @@ const createPosts = asyncHandler(async (req, res) => {
 // @route   PATCH /api/forum/:id/like
 // @access  Private
 const likePosts = asyncHandler(async (req, res) => {
+    console.log('Like request for post:', req.params.id) // Debug log
+    console.log('User ID:', req.user._id) // Debug log
+    console.log('User role:', req.user.role) // Debug log
+
     const post = await ForumPost.findById(req.params.id)
 
     if (!post) {
@@ -68,7 +72,8 @@ const likePosts = asyncHandler(async (req, res) => {
     }
 
     // Check if user already liked the post
-    const alreadyLiked = post.likes.includes(req.user._id)
+    const alreadyLiked = post.likes.some(like => like.toString() === req.user._id.toString())
+    console.log('Already liked:', alreadyLiked) // Debug log
 
     if (alreadyLiked) {
         // Unlike
@@ -78,8 +83,9 @@ const likePosts = asyncHandler(async (req, res) => {
         post.likes.push(req.user._id)
     }
 
-    await post.save()
-    res.status(200).json(post)
+    const updatedPost = await post.save()
+    console.log('Updated post:', updatedPost) // Debug log
+    res.status(200).json(updatedPost)
 })
 
 module.exports = {

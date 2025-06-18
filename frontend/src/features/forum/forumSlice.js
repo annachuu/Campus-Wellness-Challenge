@@ -37,6 +37,20 @@ export const createPost = createAsyncThunk(
     }
 )
 
+// Like/Unlike post
+export const likePost = createAsyncThunk(
+    'forum/likePost',
+    async (postId, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token
+            return await forumService.likePost(postId, token)
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 export const forumSlice = createSlice({
     name: 'forum',
     initialState,
@@ -67,6 +81,22 @@ export const forumSlice = createSlice({
                 state.posts.unshift(action.payload)
             })
             .addCase(createPost.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(likePost.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(likePost.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const index = state.posts.findIndex(post => post._id === action.payload._id)
+                if (index !== -1) {
+                    state.posts[index] = action.payload
+                }
+            })
+            .addCase(likePost.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

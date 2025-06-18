@@ -14,7 +14,7 @@ import { getChallenges } from '../features/challenges/challengeSlice'
 import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
 import { getChallengeAchievements } from '../features/achievements/achievementSlice'
-import { getForumPosts } from '../features/forum/forumSlice'
+import { getForumPosts, likePost } from '../features/forum/forumSlice'
 import {
     Container,
     Paper,
@@ -33,6 +33,7 @@ import {
 import { FaTrophy, FaComments, FaPlus, FaFile } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 
 function C_ViewChallenge() {
     const navigate = useNavigate()
@@ -42,6 +43,7 @@ function C_ViewChallenge() {
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const { posts, isLoading: forumLoading } = useSelector((state) => state.forum)
+    const { user } = useSelector((state) => state.auth)
     const [selectedChallenge, setSelectedChallenge] = useState(null)
     const [error, setError] = useState(null)
 
@@ -65,6 +67,15 @@ function C_ViewChallenge() {
             }
         }
     }, [dispatch, challenges])
+
+    const handleLike = async (postId, e) => {
+        e.stopPropagation() // Prevent navigation to forum page
+        try {
+            await dispatch(likePost(postId)).unwrap()
+        } catch (error) {
+            console.error('Error liking post:', error)
+        }
+    }
 
     if (!challenges || challengesLoading || !selectedChallenge) {
         return <div>Loading...</div>
@@ -444,9 +455,28 @@ function C_ViewChallenge() {
                                                             <Typography variant="body2">
                                                                 {post.userName}
                                                             </Typography>
-                                                            <Typography variant="body2">
-                                                                {new Date(post.createdAt).toLocaleDateString()}
-                                                            </Typography>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                                <Typography variant="body2">
+                                                                    {new Date(post.createdAt).toLocaleDateString()}
+                                                                </Typography>
+                                                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                                    <IconButton 
+                                                                        size="small" 
+                                                                        onClick={(e) => handleLike(post._id, e)}
+                                                                        sx={{ 
+                                                                            color: post.likes?.includes(user._id) ? '#795663' : 'inherit',
+                                                                            '&:hover': {
+                                                                                color: '#795663'
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        <FavoriteIcon />
+                                                                    </IconButton>
+                                                                    <Typography variant="caption" sx={{ mt: -0.5 }}>
+                                                                        {post.likes?.length || 0}
+                                                                    </Typography>
+                                                                </Box>
+                                                            </Box>
                                                         </Box>
                                                     }
                                                 />

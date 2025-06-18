@@ -15,7 +15,7 @@ import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
 import { getChallengeAchievements } from '../features/achievements/achievementSlice'
 import { claimAchievement } from '../features/achievements/achievementClaimSlice'
-import { getForumPosts } from '../features/forum/forumSlice'
+import { getForumPosts, likePost } from '../features/forum/forumSlice'
 import {
     Container,
     Paper,
@@ -34,6 +34,7 @@ import {
 } from '@mui/material'
 import { FaTrophy, FaComments, FaArrowLeft, FaFile, FaCheck } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 import '../styles/pages.css'
 
 function P_ViewChallenge() {
@@ -91,6 +92,15 @@ function P_ViewChallenge() {
             dispatch(getLeaderboard(challengeId))
         } catch (error) {
             console.error('Error claiming achievement:', error)
+        }
+    }
+
+    const handleLike = async (postId, e) => {
+        e.stopPropagation() // Prevent navigation to forum page
+        try {
+            await dispatch(likePost(postId)).unwrap()
+        } catch (error) {
+            console.error('Error liking post:', error)
         }
     }
 
@@ -486,7 +496,21 @@ function P_ViewChallenge() {
                                         <React.Fragment key={post._id}>
                                             <ListItem>
                                                 <ListItemText
-                                                    primary={post.title}
+                                                    primary={
+                                                        <Typography 
+                                                            variant="body1" 
+                                                            sx={{ 
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                display: '-webkit-box',
+                                                                WebkitLineClamp: 2,
+                                                                WebkitBoxOrient: 'vertical',
+                                                                mb: 1
+                                                            }}
+                                                        >
+                                                            {post.content}
+                                                        </Typography>
+                                                    }
                                                     secondary={
                                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                             <Typography variant="body2">
