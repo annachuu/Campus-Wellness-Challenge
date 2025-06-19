@@ -148,7 +148,7 @@ const P_LeaderboardAll = () => {
     return (
         <Container component="main" className="page-container" sx={{ mt: 10 }}>
             {/* Back Arrow */}
-            <IconButton onClick={() => navigate('/participant-dashboard')} sx={{ position: 'absolute', left: 20, top: 100 }}>
+            <IconButton onClick={() => navigate(-1)} sx={{ position: 'absolute', left: 20, top: 100 }}>
                 <ArrowBackIosNewIcon />
             </IconButton>
 

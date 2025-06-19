@@ -110,7 +110,7 @@ function Leaderboard() {
     return (
         <Container component="main" maxWidth="md" className="page-container" sx={{pt: 10}}>
             {/* Back Arrow */}
-            <IconButton onClick={() => navigate('/coordinator-dashboard')} sx={{position: 'absolute', left: 450}}>
+            <IconButton onClick={() => navigate(-1)} sx={{position: 'absolute', left: 450}}>
                 <ArrowBackIosNewIcon />
             </IconButton>
 

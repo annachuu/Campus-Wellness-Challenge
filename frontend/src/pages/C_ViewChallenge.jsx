@@ -32,7 +32,7 @@ import {
     ListItemAvatar,
     Avatar
 } from '@mui/material'
-import { FaTrophy, FaComments, FaPlus, FaFile } from 'react-icons/fa'
+import { FaTrophy, FaComments, FaPlus, FaFile, FaArrowLeft } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import '../styles/pages.css'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -89,8 +89,16 @@ function C_ViewChallenge() {
             width: '100%'
         }}>
 
+            {/* Back Button */}
+            <IconButton 
+                onClick={() => navigate(-1)} 
+                sx={{ position: 'absolute', left: 20, top: 20 }}
+            >
+                <FaArrowLeft />
+            </IconButton>
+
             {/* Back Arrow */}
-            <IconButton onClick={() => navigate('/coordinator-dashboard')} sx={{position: 'absolute', left: 450, mt: 5}}>
+            <IconButton onClick={() => navigate(-1)} sx={{position: 'absolute', left: 450, mt: 5}}>
                 <ArrowBackIosNewIcon />
             </IconButton>
 

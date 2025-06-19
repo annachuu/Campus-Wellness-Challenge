@@ -87,7 +87,7 @@ function C_CreateChallenge() {
         <Container component="main" maxWidth="md" className="page-container" sx={{mt: 10}}>
             <Paper className="dashboard-container" sx={{ p: 4 }}>
                 {/* Back Arrow */}
-                <IconButton onClick={() => navigate('/coordinator-dashboard')} sx={{position: 'absolute', left: 450}}>
+                <IconButton onClick={() => navigate(-1)} sx={{position: 'absolute', left: 450}}>
                     <ArrowBackIosNewIcon />
                 </IconButton>
 

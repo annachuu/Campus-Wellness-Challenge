@@ -160,7 +160,7 @@ function P_ViewChallenge() {
                     {error || 'Error loading challenge details'}
                 </Alert>
                 <IconButton 
-                    onClick={() => navigate('/participant-dashboard')} 
+                    onClick={() => navigate(-1)} 
                     sx={{ mt: 2 }}
                 >
                     <FaArrowLeft /> Back to Dashboard
@@ -177,14 +177,14 @@ function P_ViewChallenge() {
         }}>
             {/* Back Button */}
             <IconButton 
-                onClick={() => navigate('/participant-dashboard')} 
+                onClick={() => navigate(-1)} 
                 sx={{ position: 'absolute', left: 20, top: 20 }}
             >
                 <FaArrowLeft />
             </IconButton>
 
             {/* Back Arrow */}
-            <IconButton onClick={() => navigate('/participant-dashboard')} sx={{position: 'absolute', left: 450, mt: 5}}>
+            <IconButton onClick={() => navigate(-1)} sx={{position: 'absolute', left: 450, mt: 5}}>
                 <ArrowBackIosNewIcon />
             </IconButton>
 
