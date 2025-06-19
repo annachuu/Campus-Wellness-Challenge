@@ -15,7 +15,6 @@ import { getLeaderboard } from '../features/leaderboard/leaderboardSlice'
 import { getChallengeResources } from '../features/resources/resourceSlice'
 import { getChallengeAchievements, claimAchievement } from '../features/achievements/achievementSlice'
 import { getForumPosts, likePost } from '../features/forum/forumSlice'
-import { getParticipantChallenges } from '../features/participantChallenges/participantChallengesSlice'
 import {
     Container,
     Paper,
@@ -30,9 +29,7 @@ import {
     CircularProgress,
     Alert,
     Link,
-    Button,
-    ListItemAvatar,
-    Avatar
+    Button
 } from '@mui/material'
 import { FaTrophy, FaComments, FaArrowLeft, FaFile, FaCheck } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -42,8 +39,8 @@ import '../styles/pages.css'
 function P_ViewChallenge() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { challenges: participantChallenges, isLoading: challengesLoading } = useSelector((state) => state.participantChallenges)
-    const { leaderboards, loading: leaderboardLoading } = useSelector((state) => state.leaderboard)
+    const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
+    const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const { loading: claimLoading, error: claimError, success: claimSuccess } = useSelector((state) => state.achievementClaims)
@@ -62,7 +59,6 @@ function P_ViewChallenge() {
 
         const challengeId = localStorage.getItem('selectedChallengeId')
         console.log('Selected Challenge ID:', challengeId)
-        console.log('Current participantChallenges:', participantChallenges)
         
         if (!challengeId) {
             console.log('No challenge ID found, redirecting to dashboard')
@@ -70,36 +66,22 @@ function P_ViewChallenge() {
             return
         }
 
-        // Fetch participant challenges if not already loaded
-        if (!participantChallenges || participantChallenges.length === 0) {
-            console.log('Fetching participant challenges...')
-            dispatch(getParticipantChallenges())
-        }
-    }, [dispatch, navigate, user, participantChallenges])
-
-    useEffect(() => {
-        console.log('participantChallenges changed:', participantChallenges)
-        if (participantChallenges && participantChallenges.length > 0) {
-            const challengeId = localStorage.getItem('selectedChallengeId')
-            console.log('Looking for challenge with ID:', challengeId)
-            console.log('Available challenges:', participantChallenges.map(c => ({ id: c._id, name: c.name })))
-            
-            const challenge = participantChallenges.find(c => c._id === challengeId)
-            
-            if (challenge) {
-                console.log('Found challenge in participant challenges:', challenge)
+        // Fetch challenge data
+        dispatch(getChallenge(challengeId))
+            .unwrap()
+            .then((challenge) => {
                 setSelectedChallenge(challenge)
-                // After challenge is found, fetch related data
+                // After challenge is fetched, fetch related data
                 dispatch(getLeaderboard(challengeId))
                 dispatch(getChallengeResources(challengeId))
                 dispatch(getChallengeAchievements(challengeId))
                 dispatch(getForumPosts(challengeId))
-            } else {
-                console.log('Challenge not found in participant challenges')
-                setError('Challenge not found')
-            }
-        }
-    }, [participantChallenges, dispatch])
+            })
+            .catch((error) => {
+                console.error('Error fetching challenge data:', error)
+                setError(error)
+            })
+    }, [dispatch, navigate, user])
 
     const handleClaimAchievement = async (achievementId) => {
         try {
@@ -127,7 +109,6 @@ function P_ViewChallenge() {
     }
 
     // Show loading state only while initially fetching challenge data
-    console.log('Loading states:', { challengesLoading, selectedChallenge, participantChallenges })
     if (challengesLoading && !selectedChallenge) {
         return (
             <Box sx={{ 
@@ -145,7 +126,6 @@ function P_ViewChallenge() {
     }
 
     // Show error state if there's an error
-    console.log('Error check:', { error, selectedChallenge })
     if (error || !selectedChallenge) {
         return (
             <Box sx={{ 
@@ -160,7 +140,7 @@ function P_ViewChallenge() {
                     {error || 'Error loading challenge details'}
                 </Alert>
                 <IconButton 
-                    onClick={() => navigate(-1)} 
+                    onClick={() => navigate('/participant-dashboard')} 
                     sx={{ mt: 2 }}
                 >
                     <FaArrowLeft /> Back to Dashboard
@@ -177,14 +157,14 @@ function P_ViewChallenge() {
         }}>
             {/* Back Button */}
             <IconButton 
-                onClick={() => navigate(-1)} 
+                onClick={() => navigate('/participant-dashboard')} 
                 sx={{ position: 'absolute', left: 20, top: 20 }}
             >
                 <FaArrowLeft />
             </IconButton>
 
             {/* Back Arrow */}
-            <IconButton onClick={() => navigate(-1)} sx={{position: 'absolute', left: 450, mt: 5}}>
+            <IconButton onClick={() => navigate('/participant-dashboard')} sx={{position: 'absolute', left: 450, mt: 5}}>
                 <ArrowBackIosNewIcon />
             </IconButton>
 
@@ -373,26 +353,24 @@ function P_ViewChallenge() {
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                                         <CircularProgress />
                                     </Box>
-                                ) : leaderboards && leaderboards[selectedChallenge._id] && leaderboards[selectedChallenge._id].length > 0 ? (
-                                    leaderboards[selectedChallenge._id].map((entry, index) => (
+                                ) : leaderboard && leaderboard.length > 0 ? (
+                                    leaderboard.map((entry, index) => (
                                         <React.Fragment key={entry._id}>
                                             <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar sx={{ 
-                                                        backgroundColor: index === 0 ? '#FFD700' : 
-                                                                       index === 1 ? '#C0C0C0' : 
-                                                                       index === 2 ? '#CD7F32' : '#795663',
-                                                        color: 'white'
-                                                    }}>
-                                                        {index + 1}
-                                                    </Avatar>
-                                                </ListItemAvatar>
                                                 <ListItemText
-                                                    primary={entry.participant.name}
-                                                    secondary={`${entry.points} points`}
+                                                    primary={
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                            <Typography variant="body1">
+                                                                {index + 1}. {entry.participant.name}
+                                                            </Typography>
+                                                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                                                {entry.points} pts
+                                                            </Typography>
+                                                        </Box>
+                                                    }
                                                 />
                                             </ListItem>
-                                            {index < leaderboards[selectedChallenge._id].length - 1 && <Divider />}
+                                            {index < leaderboard.length - 1 && <Divider />}
                                         </React.Fragment>
                                     ))
                                 ) : (
@@ -502,8 +480,6 @@ function P_ViewChallenge() {
                                 Forum Posts
                             </Typography>
                             <List sx={{ 
-                                wordBreak: 'break-word', 
-                                whiteSpace: 'prep-wrap', 
                                 flexGrow: 1, 
                                 overflow: 'auto',
                                 '&::-webkit-scrollbar': {

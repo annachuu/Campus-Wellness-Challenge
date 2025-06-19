@@ -108,7 +108,7 @@ function EnrollParticipant() {
         <Box className="enroll-page" sx={{mt: 15, textAlign: 'center'}}>
             <Box sx={{position: 'relative', mb: 2}}>
                 {/* Back Arrow */}
-                <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 0}}>
+                <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 80}}>
                     <ArrowBackIosNewIcon />
                 </IconButton>
 
@@ -186,7 +186,7 @@ function EnrollParticipant() {
             </Box>
              <Button 
                 variant="contained"
-                sx={{px: 4, py: 2, mt: 3, backgroundColor: '#283D3B'}}
+                sx={{px: 4, py: 2, mt: 3, backgroundColor: '#8a9688'}}
                 onClick={handleEnroll}
                 disabled={enrollmentLoading}
             >

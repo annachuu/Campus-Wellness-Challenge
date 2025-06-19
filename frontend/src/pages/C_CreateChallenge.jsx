@@ -215,7 +215,7 @@ function C_CreateChallenge() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, backgroundColor: '#283D3B' }}
+                        sx={{ mt: 3, mb: 2, backgroundColor: '#8a9688' }}
                         startIcon={<FaPlus />}
                     >
                         Create Challenge

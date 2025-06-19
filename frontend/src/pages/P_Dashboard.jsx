@@ -193,7 +193,7 @@ function P_Dashboard() {
                                 }}>
                                     <Card sx={{ 
                                         width: '100%',
-                                        backgroundColor: '#d9bcaf',
+                                        backgroundColor: '#8a9688',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         height: '100%' // Ensure consistent height

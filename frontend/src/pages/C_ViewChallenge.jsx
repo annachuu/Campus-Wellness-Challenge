@@ -279,9 +279,9 @@ function C_ViewChallenge() {
                                             navigate('/add-achievement')
                                         }}
                                         sx={{
-                                            backgroundColor: '#283D3B',
+                                            backgroundColor: '#8a9688',
                                             '&:hover': {
-                                                backgroundColor: '#8a9688'
+                                                backgroundColor: '#283D3B'
                                             },
                                             width: '100%'
                                         }}
@@ -405,9 +405,9 @@ function C_ViewChallenge() {
                                     startIcon={<FaPlus />}
                                     onClick={() => navigate('/upload-resource')}
                                     sx={{ 
-                                        backgroundColor: '#283D3B',
+                                        backgroundColor: '#8a9688',
                                         '&:hover': {
-                                            backgroundColor: '#8a9688'
+                                            backgroundColor: '#283D3B'
                                         }
                                     }}
                                 >
@@ -593,9 +593,9 @@ function C_ViewChallenge() {
                     variant="contained"
                     onClick={() => navigate('/enroll-participant')}
                     sx={{
-                        backgroundColor: '#283D3B',
+                        backgroundColor: '#8a9688',
                         '&:hover': {
-                            backgroundColor: '#8a9688'
+                            backgroundColor: '#283D3B'
                         },
                         minWidth: '200px'
                     }}

@@ -107,7 +107,7 @@ function Forum() {
 
             {/* Write a Post */}
             <Paper sx={{ p: 5, mb: 5, display: 'flex', gap: 3, alignItems: 'flex-start', width: 700}} >
-                <Box textAlign="center">
+                <Box textAlign="center" sx={{mt: 3}}>
                     <Avatar sx={{backgroundColor: '#d9bcaf', mx: 'auto'}}>
                         {user.name?.[0] || '?'}
                     </Avatar>
@@ -119,7 +119,7 @@ function Forum() {
                         fullWidth
                         multiline
                         minRows={3}
-                        placeholder="Share your thoughts and experience!"
+                        placeholder="Share your thoughts and experiences!"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         margin="normal"
