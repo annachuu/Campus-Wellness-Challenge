@@ -249,8 +249,8 @@ function C_ViewChallenge() {
                                         Achievements
                                     </Typography>
                                 </ListItem>
-                                {achievements && achievements.length > 0 ? (
-                                    achievements.map((achievement) => (
+                                {achievements && achievements[selectedChallenge._id] && achievements[selectedChallenge._id].length > 0 ? (
+                                    achievements[selectedChallenge._id].map((achievement) => (
                                         <React.Fragment key={achievement._id}>
                                             <ListItem>
                                                 <ListItemText
