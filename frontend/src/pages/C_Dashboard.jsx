@@ -7,7 +7,7 @@
     For: Coordinators
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -22,7 +22,13 @@ import {
     Card,
     CardContent,
     CardActionArea,
-    IconButton
+    IconButton,
+    Modal,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    DialogContentText
 } from '@mui/material'
 import { FaUser, FaPlus, FaUserPlus, FaTrophy, FaTimes } from 'react-icons/fa'
 import '../styles/pages.css'
@@ -33,6 +39,8 @@ function C_Dashboard() {
     const { challenges } = useSelector((state) => state.challenge)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [challengeToDelete, setChallengeToDelete] = useState(null)
 
     useEffect(() => {
         dispatch(getChallenges())
@@ -45,16 +53,28 @@ function C_Dashboard() {
 
     const handleDeleteChallenge = async (challengeId, challengeName, e) => {
         e.stopPropagation() // Prevent triggering the card click
-        if (window.confirm(`Are you sure you want to delete the challenge "${challengeName}"? This action cannot be undone.`)) {
+        setChallengeToDelete({ id: challengeId, name: challengeName })
+        setDeleteModalOpen(true)
+    }
+
+    const confirmDelete = async () => {
+        if (challengeToDelete) {
             try {
-                await dispatch(deleteChallenge(challengeId)).unwrap()
+                await dispatch(deleteChallenge(challengeToDelete.id)).unwrap()
                 // Refresh the challenges list after deletion
                 dispatch(getChallenges())
+                setDeleteModalOpen(false)
+                setChallengeToDelete(null)
             } catch (error) {
                 console.error('Error deleting challenge:', error)
                 alert('Failed to delete challenge. Please try again.')
             }
         }
+    }
+
+    const cancelDelete = () => {
+        setDeleteModalOpen(false)
+        setChallengeToDelete(null)
     }
 
     return (
@@ -217,6 +237,49 @@ function C_Dashboard() {
                     </Button>
                 </Box>
             </Paper>
+
+            {/* Delete Confirmation Modal */}
+            <Dialog
+                open={deleteModalOpen}
+                onClose={cancelDelete}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title" sx={{ color: '#283D3B' }}>
+                    {"Confirm Challenge Deletion"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description" sx={{ color: '#795663' }}>
+                        Are you sure you want to delete the challenge "{challengeToDelete?.name}"? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button 
+                        onClick={cancelDelete}
+                        sx={{ 
+                            color: '#795663',
+                            '&:hover': {
+                                backgroundColor: '#f5f5f5'
+                            }
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        onClick={confirmDelete} 
+                        autoFocus
+                        sx={{ 
+                            backgroundColor: '#8a9688',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#6b7a6a'
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 }
