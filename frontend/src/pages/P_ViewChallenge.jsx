@@ -40,7 +40,7 @@ function P_ViewChallenge() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
-    const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
+    const { leaderboards, loading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const { loading: claimLoading, error: claimError, success: claimSuccess } = useSelector((state) => state.achievementClaims)
@@ -353,8 +353,8 @@ function P_ViewChallenge() {
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                                         <CircularProgress />
                                     </Box>
-                                ) : leaderboard && leaderboard.length > 0 ? (
-                                    leaderboard.map((entry, index) => (
+                                ) : leaderboards && leaderboards[selectedChallenge._id] && leaderboards[selectedChallenge._id].length > 0 ? (
+                                    leaderboards[selectedChallenge._id].map((entry, index) => (
                                         <React.Fragment key={entry._id}>
                                             <ListItem>
                                                 <ListItemText
@@ -370,7 +370,7 @@ function P_ViewChallenge() {
                                                     }
                                                 />
                                             </ListItem>
-                                            {index < leaderboard.length - 1 && <Divider />}
+                                            {index < leaderboards[selectedChallenge._id].length - 1 && <Divider />}
                                         </React.Fragment>
                                     ))
                                 ) : (

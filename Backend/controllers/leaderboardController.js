@@ -106,7 +106,12 @@ const getParticipantChallenges = async (req, res) => {
         .populate({
             path: 'challenge',
             model: 'Challenge',
-            select: 'name description type goal frequency startDate endDate status'
+            select: 'name description type goal frequency startDate endDate status createdBy',
+            populate: {
+                path: 'createdBy',
+                model: 'Coordinator',
+                select: 'name'
+            }
         })
         .lean()
         
@@ -139,7 +144,8 @@ const getParticipantChallenges = async (req, res) => {
                     endDate: entry.challenge.endDate,
                     status: entry.challenge.status,
                     points: entry.points,
-                    participantCount
+                    participantCount,
+                    coordinatorName: entry.challenge.createdBy ? entry.challenge.createdBy.name : 'Unknown Coordinator'
                 }
             }))
 

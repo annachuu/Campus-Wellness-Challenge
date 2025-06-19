@@ -84,7 +84,10 @@ const achievementSlice = createSlice({
             })
             .addCase(getChallengeAchievements.fulfilled, (state, action) => {
                 state.loading = false
-                state.achievements = action.payload
+                // Merge new achievements with existing ones, avoiding duplicates
+                const existingIds = new Set(state.achievements.map(a => a._id))
+                const newAchievements = action.payload.filter(a => !existingIds.has(a._id))
+                state.achievements = [...state.achievements, ...newAchievements]
                 state.error = null
             })
             .addCase(getChallengeAchievements.rejected, (state, action) => {

@@ -110,7 +110,7 @@ function C_Dashboard() {
                                             },
                                             backgroundColor: '#8a9688',
                                             position: 'relative',
-                                            height: 320,
+                                            height: 360,
                                             display: 'flex',
                                             flexDirection: 'column'
                                         }}
@@ -135,20 +135,20 @@ function C_Dashboard() {
                                                 <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF', mb: 1}} gutterBottom>
                                                     {challenge.name}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 2, flexGrow: 1}} paragraph>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 1.5, flexGrow: 1}} paragraph>
                                                     {challenge.description}
                                                 </Typography>
-                                                <Box sx={{ mb: 2 }}>
-                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                <Box sx={{ mb: 1.5 }}>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                         Type: {challenge.type}
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                         Goal: {challenge.goal}
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                         Frequency: {challenge.frequency}
                                                     </Typography>
-                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                    <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                         Participants: {challenge.participantCount || 0}
                                                     </Typography>
                                                 </Box>

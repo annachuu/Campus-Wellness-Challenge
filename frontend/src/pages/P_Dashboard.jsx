@@ -52,9 +52,9 @@ function P_Dashboard() {
     const recentAchievements = [...achievements]
         .filter(achievement => 
             challenges.some(challenge => challenge._id === achievement.challenge) &&
-            achievement.lastClaimed // Only show achievements that have been claimed
+            achievement.lastClaimed !== null && achievement.lastClaimed !== undefined // Only show achievements that have been claimed
         )
-        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        .sort((a, b) => new Date(b.lastClaimed) - new Date(a.lastClaimed)) // Sort by most recent first
         .slice(0, 3)
 
     console.log('Enrolled challenges:', challenges) // Debug log
@@ -131,7 +131,7 @@ function P_Dashboard() {
                                                 boxShadow: 3
                                             },
                                             backgroundColor: '#8a9688',
-                                            height: 320, // Fixed height for consistency
+                                            height: 360, // Increased height to accommodate coordinator info
                                             display: 'flex',
                                             flexDirection: 'column'
                                         }}
@@ -140,24 +140,27 @@ function P_Dashboard() {
                                             <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF', mb: 1}} gutterBottom>
                                                 {challenge.name}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 2, flexGrow: 1}} paragraph>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 1.5, flexGrow: 1}} paragraph>
                                                 {challenge.description}
                                             </Typography>
-                                            <Box sx={{ mb: 2 }}>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                            <Box sx={{ mb: 1.5 }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                     Points: {challenge.points}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                     Type: {challenge.type}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                     Goal: {challenge.goal}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                     Frequency: {challenge.frequency}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
                                                     Participants: {challenge.participantCount || 0}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}} gutterBottom>
+                                                    Coordinator: {challenge.coordinatorName || 'Unknown'}
                                                 </Typography>
                                             </Box>
                                             <Divider sx={{ my: 1 }} />
@@ -187,36 +190,55 @@ function P_Dashboard() {
                         <FaMedal />
                         Recent Achievements
                     </Typography>
-                    <Grid container spacing={3} sx={{ width: '100%', margin: 0 }}>
+                    <Grid 
+                        container 
+                        spacing={3} 
+                        sx={{ 
+                            width: '100%',
+                            margin: 0,
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}
+                    >
                         {recentAchievements.length > 0 ? (
                             recentAchievements.map((achievement) => (
-                                <Grid item xs={12} sm={6} md={4} key={achievement._id} sx={{ 
-                                    display: 'flex',
-                                    minWidth: 0 // Prevent overflow
-                                }}>
+                                <Grid 
+                                    item 
+                                    xs={12} 
+                                    sm={recentAchievements.length === 1 ? 12 : 6} 
+                                    md={recentAchievements.length === 1 ? 12 : recentAchievements.length === 2 ? 6 : 4} 
+                                    key={achievement._id} 
+                                    sx={{ 
+                                        display: 'flex',
+                                        flex: 1
+                                    }}
+                                >
                                     <Card sx={{ 
                                         width: '100%',
                                         backgroundColor: '#8a9688',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        height: '100%' // Ensure consistent height
+                                        height: '100%', // Ensure consistent height
+                                        minHeight: 200 // Set minimum height for consistency
                                     }}>
                                         <CardContent sx={{ flexGrow: 1 }}>
-                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF', mb: 1}} gutterBottom>
                                                 {achievement.title}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
-                                                {achievement.points} points
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 1}} paragraph>
+                                                {achievement.description}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}}>
-                                                Refresh: {achievement.refreshTime}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mt: 1 }}>
-                                                Challenge: {challenges.find(c => c._id === achievement.challenge)?.name || 'Unknown Challenge'}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF', mt: 1 }}>
-                                                Created: {new Date(achievement.createdAt).toLocaleDateString()}
-                                            </Typography>
+                                            <Box sx={{ mt: 'auto' }}>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}}>
+                                                    Points: {achievement.points}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 0.5}}>
+                                                    Challenge: {challenges.find(c => c._id === achievement.challenge)?.name || 'Unknown Challenge'}
+                                                </Typography>
+                                                <Typography variant="caption" color="text.secondary" display="block" sx={{ color: '#FFFFFF', mt: 1 }}>
+                                                    Claimed: {new Date(achievement.lastClaimed).toLocaleDateString()}
+                                                </Typography>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
