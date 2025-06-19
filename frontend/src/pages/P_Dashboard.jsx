@@ -49,7 +49,8 @@ function P_Dashboard() {
     }, [challenges, dispatch])
 
     // Get the 3 most recent achievements from enrolled challenges only
-    const recentAchievements = [...achievements]
+    const recentAchievements = Object.values(achievements)
+        .flat()
         .filter(achievement => 
             challenges.some(challenge => challenge._id === achievement.challenge) &&
             achievement.lastClaimed !== null && achievement.lastClaimed !== undefined // Only show achievements that have been claimed

@@ -253,8 +253,8 @@ function P_ViewChallenge() {
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                                         <CircularProgress />
                                     </Box>
-                                ) : achievements && achievements.length > 0 ? (
-                                    achievements.map((achievement) => (
+                                ) : achievements && achievements[selectedChallenge._id] && achievements[selectedChallenge._id].length > 0 ? (
+                                    achievements[selectedChallenge._id].map((achievement) => (
                                         <ListItem key={achievement._id}>
                                             <ListItemText
                                                 primary={achievement.title}

@@ -59,7 +59,7 @@ export const claimAchievement = createAsyncThunk(
 )
 
 const initialState = {
-    achievements: [],
+    achievements: {},
     loading: false,
     error: null,
     success: false
@@ -84,10 +84,9 @@ const achievementSlice = createSlice({
             })
             .addCase(getChallengeAchievements.fulfilled, (state, action) => {
                 state.loading = false
-                // Merge new achievements with existing ones, avoiding duplicates
-                const existingIds = new Set(state.achievements.map(a => a._id))
-                const newAchievements = action.payload.filter(a => !existingIds.has(a._id))
-                state.achievements = [...state.achievements, ...newAchievements]
+                // Store achievements by challenge ID
+                const challengeId = action.meta.arg
+                state.achievements[challengeId] = action.payload
                 state.error = null
             })
             .addCase(getChallengeAchievements.rejected, (state, action) => {
@@ -102,7 +101,12 @@ const achievementSlice = createSlice({
             })
             .addCase(createAchievement.fulfilled, (state, action) => {
                 state.loading = false
-                state.achievements.push(action.payload)
+                // Add the new achievement to the appropriate challenge
+                const challengeId = action.payload.challenge
+                if (!state.achievements[challengeId]) {
+                    state.achievements[challengeId] = []
+                }
+                state.achievements[challengeId].push(action.payload)
                 state.success = true
                 state.error = null
             })
@@ -119,14 +123,19 @@ const achievementSlice = createSlice({
             .addCase(claimAchievement.fulfilled, (state, action) => {
                 state.loading = false
                 // Update the achievement's claim status
-                const achievementIndex = state.achievements.findIndex(
-                    a => a._id === action.meta.arg.achievementId
-                )
-                if (achievementIndex !== -1) {
-                    state.achievements[achievementIndex] = {
-                        ...state.achievements[achievementIndex],
-                        canClaim: false,
-                        lastClaimed: action.payload.lastClaimed
+                const achievementId = action.meta.arg.achievementId
+                const challengeId = action.meta.arg.challengeId
+                
+                if (state.achievements[challengeId]) {
+                    const achievementIndex = state.achievements[challengeId].findIndex(
+                        a => a._id === achievementId
+                    )
+                    if (achievementIndex !== -1) {
+                        state.achievements[challengeId][achievementIndex] = {
+                            ...state.achievements[challengeId][achievementIndex],
+                            canClaim: false,
+                            lastClaimed: action.payload.lastClaimed
+                        }
                     }
                 }
                 state.error = null
