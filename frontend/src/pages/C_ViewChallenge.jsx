@@ -28,7 +28,9 @@ import {
     ListItemText,
     Button,
     CircularProgress,
-    Link
+    Link,
+    ListItemAvatar,
+    Avatar
 } from '@mui/material'
 import { FaTrophy, FaComments, FaPlus, FaFile } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -38,8 +40,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 function C_ViewChallenge() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
-    const { leaderboard, isLoading: leaderboardLoading } = useSelector((state) => state.leaderboard)
+    const { challenge, isLoading: challengesLoading } = useSelector((state) => state.challenge)
+    const { leaderboards, loading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
     const { posts, isLoading: forumLoading } = useSelector((state) => state.forum)
@@ -52,21 +54,15 @@ function C_ViewChallenge() {
     }, [dispatch])
 
     useEffect(() => {
-        if (challenges && challenges.length > 0) {
-            const selectedChallengeId = localStorage.getItem('selectedChallengeId')
-            const challenge = selectedChallengeId 
-                ? challenges.find(c => c._id === selectedChallengeId)
-                : challenges[0]
-            
-            if (challenge) {
-                setSelectedChallenge(challenge)
-                dispatch(getLeaderboard(challenge._id))
-                dispatch(getChallengeResources(challenge._id))
-                dispatch(getChallengeAchievements(challenge._id))
-                dispatch(getForumPosts(challenge._id))
-            }
+        if (challenge) {
+            setSelectedChallenge(challenge)
+            // After challenge is fetched, fetch related data
+            dispatch(getLeaderboard(challenge._id))
+            dispatch(getChallengeResources(challenge._id))
+            dispatch(getChallengeAchievements(challenge._id))
+            dispatch(getForumPosts(challenge._id))
         }
-    }, [dispatch, challenges])
+    }, [dispatch, challenge])
 
     const handleLike = async (postId, e) => {
         e.stopPropagation() // Prevent navigation to forum page
@@ -82,7 +78,7 @@ function C_ViewChallenge() {
         }
     }
 
-    if (!challenges || challengesLoading || !selectedChallenge) {
+    if (!challenge || challengesLoading || !selectedChallenge) {
         return <div>Loading...</div>
     }
 
@@ -275,24 +271,26 @@ function C_ViewChallenge() {
                                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                                         <CircularProgress />
                                     </Box>
-                                ) : leaderboard && leaderboard.length > 0 ? (
-                                    leaderboard.map((entry, index) => (
+                                ) : leaderboards && leaderboards[selectedChallenge._id] && leaderboards[selectedChallenge._id].length > 0 ? (
+                                    leaderboards[selectedChallenge._id].map((entry, index) => (
                                         <React.Fragment key={entry._id}>
                                             <ListItem>
+                                                <ListItemAvatar>
+                                                    <Avatar sx={{ 
+                                                        backgroundColor: index === 0 ? '#FFD700' : 
+                                                                       index === 1 ? '#C0C0C0' : 
+                                                                       index === 2 ? '#CD7F32' : '#795663',
+                                                        color: 'white'
+                                                    }}>
+                                                        {index + 1}
+                                                    </Avatar>
+                                                </ListItemAvatar>
                                                 <ListItemText
-                                                    primary={
-                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                            <Typography variant="body1">
-                                                                {index + 1}. {entry.participant.name}
-                                                            </Typography>
-                                                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                                                {entry.points} pts
-                                                            </Typography>
-                                                        </Box>
-                                                    }
+                                                    primary={entry.participant.name}
+                                                    secondary={`${entry.points} points`}
                                                 />
                                             </ListItem>
-                                            {index < leaderboard.length - 1 && <Divider />}
+                                            {index < leaderboards[selectedChallenge._id].length - 1 && <Divider />}
                                         </React.Fragment>
                                     ))
                                 ) : (

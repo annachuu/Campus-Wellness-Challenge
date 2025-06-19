@@ -23,6 +23,7 @@ import EnrollParticipant from './pages/C_Enroll.jsx'
 import C_ChallengeDetail from './pages/C_ChallengeDetail'
 import C_AddAchievement from './pages/C_AddAchievement.jsx'
 import Forum from './pages/B_Forum'
+import P_LeaderboardAll from './pages/P_LeaderboardAll.jsx'
 
 // Logged in users
 import PrivateRoute from './components/PrivateRoute'
@@ -125,6 +126,12 @@ function App() {
             <Route path='/register-participant' element={
               <RoleRoute>
                 <Register />
+              </RoleRoute>
+            } />
+
+            <Route path="/leaderboard-all" element={
+              <RoleRoute allowedRoles={['participant']}>
+                <P_LeaderboardAll />
               </RoleRoute>
             } />
 

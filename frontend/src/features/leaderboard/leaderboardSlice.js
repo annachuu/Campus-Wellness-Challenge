@@ -50,8 +50,8 @@ export const getLeaderboard = createAsyncThunk(
 )
 
 const initialState = {
-    leaderboard: [],
-    isLoading: false,
+    leaderboards: {},
+    loading: false,
     isError: false,
     message: ''
 }
@@ -65,27 +65,29 @@ export const leaderboardSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(enrollParticipants.pending, (state) => {
-                state.isLoading = true
+                state.loading = true
             })
             .addCase(enrollParticipants.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.loading = false
                 state.isError = false
                 state.message = action.payload.message
             })
             .addCase(enrollParticipants.rejected, (state, action) => {
-                state.isLoading = false
+                state.loading = false
                 state.isError = true
                 state.message = action.payload
             })
             .addCase(getLeaderboard.pending, (state) => {
-                state.isLoading = true
+                state.loading = true
             })
             .addCase(getLeaderboard.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.leaderboard = action.payload
+                state.loading = false
+                // Store leaderboard by challenge ID
+                const challengeId = action.meta.arg
+                state.leaderboards[challengeId] = action.payload
             })
             .addCase(getLeaderboard.rejected, (state, action) => {
-                state.isLoading = false
+                state.loading = false
                 state.isError = true
                 state.message = action.payload
             })

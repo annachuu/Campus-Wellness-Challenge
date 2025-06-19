@@ -23,7 +23,6 @@ import '../styles/pages.css'
 import logo from '../images/logo.png'
 import HomeIcon from '@mui/icons-material/Home';
 import FlagIcon from '@mui/icons-material/Flag';
-import ForumIcon from '@mui/icons-material/Forum';
 
 function Header() {
     const navigate = useNavigate()
@@ -40,11 +39,11 @@ function Header() {
         <AppBar 
             position="fixed" 
             className="header-container"
-            sx={{
-                backgroundColor: '#283D3B',
+            sx={{ 
                 width: '100vw',
                 left: 0,
-                right: 0
+                right: 0,
+                backgroundColor: '#283D3B !important'
             }}
         >
             <Toolbar className="header-content" disableGutters>
@@ -69,15 +68,14 @@ function Header() {
                                     Challenges
                                 </Link>
 
-                                <Link to='/leaderboard' className='header-button'>
+                                <Link to='/leaderboard-all' className='header-button'>
                                     <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 15}} />
                                     Leaderboard
                                 </Link>
 
-                                <Link to='/forum' className='header-button'>
-                                    <ForumIcon style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 16}} />
+                                {/* <Link tp='/forum' className='header-button'>                        // ENABLE IN PHASE 2
                                     Forum
-                                </Link>
+                                </Link> */}
 
                                 <Button
                                     component={Link}
@@ -91,13 +89,20 @@ function Header() {
                             </Box>
                         ) : (
                             <Box sx={{ display: 'flex', gap: 2 }}>
-                                <li>
-                                    <Link to='/leaderboard' className='header-button'>
-                                        <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px'}} />
-                                        Leaderboard
-                                    </Link>
-                                </li>
-                                
+                                <Link to='/view-challenge' className='header-button'>
+                                    <FlagIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 20}} />
+                                    Challenges
+                                </Link>
+
+                                <Link to='/leaderboard-all' className='header-button'>
+                                    <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 15}} />
+                                    Leaderboard
+                                </Link>
+
+                                <Link tp='/forum' className='header-button'>                      
+                                    Forum
+                                </Link> 
+
                                 <Button
                                     component={Link}
                                     to="/login"

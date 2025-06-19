@@ -6,9 +6,12 @@ const RoleRoute = ({ children, allowedRoles }) => {
     const path = window.location.pathname
     // Extract the first part of the path after the first slash
     const firstPath = path.split('/')[1]
+    // Extract the second part for nested routes like 'participant/view-challenge'
+    const secondPath = path.split('/')[2]
 
     console.log('RoleRoute - Current path:', path)
     console.log('RoleRoute - First path:', firstPath)
+    console.log('RoleRoute - Second path:', secondPath)
     console.log('RoleRoute - User:', user)
     console.log('RoleRoute - Allowed roles:', allowedRoles)
 
@@ -51,12 +54,20 @@ const RoleRoute = ({ children, allowedRoles }) => {
     // If logged in as participant
     if (isParticipant) {
         // Allow access to participant dashboard and related pages
-        if (firstPath === 'participant-dashboard' || 
-            firstPath === 'leaderboard' || 
-            firstPath === 'participant') {
+        const allowedPaths = ['dashboard', 'view-challenge', 'leaderboard', 'leaderboard-all']
+        
+        // Check if it's a participant route (starts with 'participant/')
+        if (firstPath === 'participant' && allowedPaths.includes(secondPath)) {
+            console.log('RoleRoute - Participant accessing allowed participant page')
+            return children
+        }
+        
+        // Check direct paths
+        if (allowedPaths.includes(firstPath)) {
             console.log('RoleRoute - Participant accessing allowed page')
             return children
         }
+        
         // Redirect to participant dashboard for other pages
         console.log('RoleRoute - Participant accessing restricted page, redirecting to dashboard')
         return <Navigate to="/participant-dashboard" />
@@ -65,13 +76,8 @@ const RoleRoute = ({ children, allowedRoles }) => {
     // If logged in as coordinator
     if (isCoordinator) {
         // Allow access to coordinator pages
-        if (firstPath === 'coordinator-dashboard' || 
-            firstPath === 'create-challenge' || 
-            firstPath === 'enroll-participant' ||
-            firstPath === 'upload-resource' ||
-            firstPath === 'view-challenge' ||
-            firstPath === 'challenge-detail' ||
-            firstPath === 'add-achievement') {
+        const allowedPaths = ['coordinator-dashboard', 'create-challenge', 'enroll-participant', 'upload-resource', 'view-challenge', 'challenge-detail', 'add-achievement']
+        if (allowedPaths.includes(firstPath)) {
             console.log('RoleRoute - Coordinator accessing allowed page')
             return children
         }
