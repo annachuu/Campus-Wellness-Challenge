@@ -467,7 +467,9 @@ function P_ViewChallenge() {
                                 '&:hover': {
                                     transform: 'translateY(-4px)',
                                     boxShadow: 3
-                                }
+                                },
+                                wordBreak: 'break-word', 
+                                whiteSpace: 'prep-wrap' 
                             }}
                         >
                             <Typography variant="h6" component="h2" gutterBottom sx={{ 

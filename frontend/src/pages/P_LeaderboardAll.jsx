@@ -161,7 +161,7 @@ const P_LeaderboardAll = () => {
             </Typography>
 
             {/* Challenge Rankings */}
-            <Paper elevation={3} sx={{ p: 3 }}>
+            <Paper elevation={3} sx={{ p: 3, width: 500 }}>
                 <Typography variant="h6" gutterBottom sx={{ color: '#283D3B', mb: 2 }}>
                     Challenge Rankings
                 </Typography>
@@ -191,7 +191,8 @@ const P_LeaderboardAll = () => {
                                                 </Typography>
                                                 <Typography variant="h6" sx={{ 
                                                     color: getRankColor(ranking.rank),
-                                                    fontWeight: 'bold'
+                                                    fontWeight: 'bold',
+                                                    height: 2
                                                 }}>
                                                     #{ranking.rank}
                                                 </Typography>
