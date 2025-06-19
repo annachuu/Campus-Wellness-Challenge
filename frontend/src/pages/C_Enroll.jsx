@@ -93,9 +93,9 @@ function EnrollParticipant() {
             setSelectedUsers([])
             setSelectedChallenges([])
             
-            // Navigate back to view challenge page after a short delay
+            // Navigate back to coordinator dashboard after a short delay
             setTimeout(() => {
-                navigate('/view-challenge')
+                navigate('/coordinator-dashboard')
             }, 2000)
         } catch (error) {
             setAlertMessage(error.message || 'Failed to enroll participants')
@@ -108,7 +108,7 @@ function EnrollParticipant() {
         <Box className="enroll-page" sx={{mt: 15, textAlign: 'center'}}>
             <Box sx={{position: 'relative', mb: 2}}>
                 {/* Back Arrow */}
-                <IconButton onClick={() => navigate('/view-challenge')} sx={{position: 'absolute', left: 80}}>
+                <IconButton onClick={() => navigate('/coordinator-dashboard')} sx={{position: 'absolute', left: 80}}>
                     <ArrowBackIosNewIcon />
                 </IconButton>
 

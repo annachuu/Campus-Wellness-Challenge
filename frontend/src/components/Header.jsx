@@ -4,7 +4,7 @@
                 Julia Hu
                 Anna Chu
     File Name: Header.jsx
-    For: Guests
+    For: All
 */
 import React from 'react'
 import { FaSignInAlt, FaSignOutAlt, FaUser, FaHome, FaTrophy, FaPlus, FaUserPlus } from 'react-icons/fa'
