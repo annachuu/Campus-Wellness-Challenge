@@ -65,7 +65,7 @@ const P_LeaderboardAll = () => {
         
         if (leaderboards && challenges) {
             console.log('Processing leaderboards and challenges:', { leaderboards, challenges })
-            console.log('User ID:', user.id)
+            console.log('User ID:', user._id)
             const userRankings = []
             let totalPoints = 0
             let totalChallenges = challenges.length
@@ -78,13 +78,13 @@ const P_LeaderboardAll = () => {
                 if (leaderboard && Array.isArray(leaderboard)) {
                     // Find user's position in this challenge
                     const userEntry = leaderboard.find(entry => 
-                        entry.participant._id === user.id
+                        entry.participant._id === user._id
                     )
                     console.log(`User entry for ${challenge.name || challenge.title}:`, userEntry)
                     
                     if (userEntry) {
                         const userRank = leaderboard.findIndex(entry => 
-                            entry.participant._id === user.id
+                            entry.participant._id === user._id
                         ) + 1
                         
                         totalPoints += userEntry.points
@@ -119,7 +119,7 @@ const P_LeaderboardAll = () => {
                 bestChallenge
             })
         }
-    }, [leaderboards, challenges, user.id])
+    }, [leaderboards, challenges, user._id])
 
     const getRankIcon = (rank) => {
         if (rank === 1) return <FaTrophy style={{ color: '#FFD700' }} />
@@ -201,9 +201,6 @@ const P_LeaderboardAll = () => {
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
                                                 <Typography variant="body2" color="text.secondary">
                                                     {ranking.points} points
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {ranking.totalParticipants} participants
                                                 </Typography>
                                             </Box>
                                         }
