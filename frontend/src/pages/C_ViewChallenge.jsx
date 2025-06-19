@@ -30,7 +30,8 @@ import {
     CircularProgress,
     Link,
     ListItemAvatar,
-    Avatar
+    Avatar,
+    Alert
 } from '@mui/material'
 import { FaTrophy, FaComments, FaPlus, FaFile, FaArrowLeft } from 'react-icons/fa'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
@@ -40,7 +41,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 function C_ViewChallenge() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { challenge, isLoading: challengesLoading } = useSelector((state) => state.challenge)
+    const { challenges, isLoading: challengesLoading } = useSelector((state) => state.challenge)
     const { leaderboards, loading: leaderboardLoading } = useSelector((state) => state.leaderboard)
     const { resources, isLoading: resourcesLoading } = useSelector((state) => state.resources)
     const { achievements, isLoading: achievementsLoading } = useSelector((state) => state.achievements)
@@ -50,19 +51,47 @@ function C_ViewChallenge() {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        dispatch(getChallenges())
-    }, [dispatch])
+        // Check if user is authenticated
+        if (!user) {
+            console.log('No user found, redirecting to login')
+            navigate('/login')
+            return
+        }
+
+        const challengeId = localStorage.getItem('selectedChallengeId')
+        console.log('Selected Challenge ID:', challengeId)
+        
+        if (!challengeId) {
+            console.log('No challenge ID found, redirecting to dashboard')
+            navigate('/coordinator-dashboard')
+            return
+        }
+
+        // Fetch challenges if not already loaded
+        if (!challenges || challenges.length === 0) {
+            dispatch(getChallenges())
+        }
+    }, [dispatch, navigate, user, challenges])
 
     useEffect(() => {
-        if (challenge) {
-            setSelectedChallenge(challenge)
-            // After challenge is fetched, fetch related data
-            dispatch(getLeaderboard(challenge._id))
-            dispatch(getChallengeResources(challenge._id))
-            dispatch(getChallengeAchievements(challenge._id))
-            dispatch(getForumPosts(challenge._id))
+        if (challenges && challenges.length > 0) {
+            const challengeId = localStorage.getItem('selectedChallengeId')
+            const challenge = challenges.find(c => c._id === challengeId)
+            
+            if (challenge) {
+                console.log('Found challenge in challenges:', challenge)
+                setSelectedChallenge(challenge)
+                // After challenge is found, fetch related data
+                dispatch(getLeaderboard(challengeId))
+                dispatch(getChallengeResources(challengeId))
+                dispatch(getChallengeAchievements(challengeId))
+                dispatch(getForumPosts(challengeId))
+            } else {
+                console.log('Challenge not found in challenges')
+                setError('Challenge not found')
+            }
         }
-    }, [dispatch, challenge])
+    }, [challenges, dispatch])
 
     const handleLike = async (postId, e) => {
         e.stopPropagation() // Prevent navigation to forum page
@@ -78,8 +107,45 @@ function C_ViewChallenge() {
         }
     }
 
-    if (!challenge || challengesLoading || !selectedChallenge) {
-        return <div>Loading...</div>
+    // Show loading state only while initially fetching challenge data
+    if (challengesLoading && !selectedChallenge) {
+        return (
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh',
+                flexDirection: 'column',
+                gap: 2
+            }}>
+                <CircularProgress />
+                <Typography>Loading challenge details...</Typography>
+            </Box>
+        )
+    }
+
+    // Show error state if there's an error
+    if (error || !selectedChallenge) {
+        return (
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh',
+                flexDirection: 'column',
+                gap: 2
+            }}>
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error || 'Error loading challenge details'}
+                </Alert>
+                <IconButton 
+                    onClick={() => navigate('/coordinator-dashboard')} 
+                    sx={{ mt: 2 }}
+                >
+                    <FaArrowLeft /> Back to Dashboard
+                </IconButton>
+            </Box>
+        )
     }
 
     return (

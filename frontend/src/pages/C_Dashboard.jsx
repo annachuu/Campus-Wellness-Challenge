@@ -49,7 +49,7 @@ function C_Dashboard() {
     }, [challenges, dispatch])
 
     // Get the 3 most recent achievements
-    const recentAchievements = achievements
+    const recentAchievements = [...achievements]
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 3)
 

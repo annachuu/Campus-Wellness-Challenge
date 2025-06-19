@@ -7,7 +7,7 @@
     For: Guests
 */
 import React from 'react'
-import { FaSignInAlt, FaSignOutAlt, FaUser, FaHome, FaTrophy } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUser, FaHome, FaTrophy, FaPlus, FaUserPlus } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
@@ -56,53 +56,9 @@ function Header() {
 
                 <Box component="nav">
                     <ul className='nav-list'>
-                        {user ? (
+                        {!user ? (
+                            // Guest version - not logged in
                             <Box sx={{ display: 'flex', gap: 2 }}>
-                                <Link to='/participant-dashboard' className='header-button'>
-                                    <HomeIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 25}} />
-                                    Home
-                                </Link>
-
-                                <Link to='/view-challenge' className='header-button'>
-                                    <FlagIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 20}} />
-                                    Challenges
-                                </Link>
-
-                                <Link to='/leaderboard-all' className='header-button'>
-                                    <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 15}} />
-                                    Leaderboard
-                                </Link>
-
-                                {/* <Link tp='/forum' className='header-button'>                        // ENABLE IN PHASE 2
-                                    Forum
-                                </Link> */}
-
-                                <Button
-                                    component={Link}
-                                    to="/logout"
-                                    className="header-button"
-                                    startIcon={<FaSignInAlt style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 18}} />}
-
-                                >
-                                    Logout
-                                </Button>
-                            </Box>
-                        ) : (
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-                                <Link to='/view-challenge' className='header-button'>
-                                    <FlagIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 20}} />
-                                    Challenges
-                                </Link>
-
-                                <Link to='/leaderboard-all' className='header-button'>
-                                    <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 15}} />
-                                    Leaderboard
-                                </Link>
-
-                                <Link tp='/forum' className='header-button'>                      
-                                    Forum
-                                </Link> 
-
                                 <Button
                                     component={Link}
                                     to="/login"
@@ -118,6 +74,55 @@ function Header() {
                                     startIcon={<FaUser style={{verticalAlign: 'middle', marginTop: '-3px'}} />}
                                 >
                                     Register
+                                </Button>
+                            </Box>
+                        ) : user.role === 'participant' ? (
+                            // Participant version
+                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                <Link to='/participant-dashboard' className='header-button'>
+                                    <HomeIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 25}} />
+                                    Home
+                                </Link>
+
+                                <Link to='/leaderboard-all' className='header-button'>
+                                    <FaTrophy style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 15}} />
+                                    Leaderboard
+                                </Link>
+
+                                <Button
+                                    component={Link}
+                                    to="/logout"
+                                    className="header-button"
+                                    startIcon={<FaSignInAlt style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 18}} />}
+                                >
+                                    Logout
+                                </Button>
+                            </Box>
+                        ) : (
+                            // Coordinator version
+                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                <Link to='/coordinator-dashboard' className='header-button'>
+                                    <HomeIcon style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 25}} />
+                                    Home
+                                </Link>
+
+                                <Link to='/create-challenge' className='header-button'>
+                                    <FaPlus style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 20}} />
+                                    Create Challenge
+                                </Link>
+
+                                <Link to='/enroll-participant' className='header-button'>
+                                    <FaUserPlus style={{verticalAlign: 'middle', marginTop: '-2px', fontSize: 20}} />
+                                    Enroll Participant
+                                </Link>
+
+                                <Button
+                                    component={Link}
+                                    to="/logout"
+                                    className="header-button"
+                                    startIcon={<FaSignInAlt style={{verticalAlign: 'middle', marginTop: '-1px', fontSize: 18}} />}
+                                >
+                                    Logout
                                 </Button>
                             </Box>
                         )}
