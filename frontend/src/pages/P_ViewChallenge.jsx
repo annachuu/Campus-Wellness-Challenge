@@ -480,6 +480,8 @@ function P_ViewChallenge() {
                                 Forum Posts
                             </Typography>
                             <List sx={{ 
+                                wordBreak: 'break-word', 
+                                whiteSpace: 'prep-wrap', 
                                 flexGrow: 1, 
                                 overflow: 'auto',
                                 '&::-webkit-scrollbar': {
