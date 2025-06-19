@@ -168,30 +168,30 @@ function Forum() {
                                       {post.content}
                                   </Typography>
 
-                                  <Box sx={{ display: ' flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                      {/* Date */}
-                                      <Typography variant="caption" color="text.secondary">
-                                          {new Date(post.createdAt).toLocaleDateString()}
-                                      </Typography>
+                                  <Box sx={{ position: 'relative', height: 24}}>
+                                    {/* Date */}
+                                    <Typography variant="caption" color="text.secondary" sx={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 0}}>
+                                        {new Date(post.createdAt).toLocaleDateString()}
+                                    </Typography>
 
-                                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        {/* Likes */}
-                                        <IconButton 
-                                            size="small" 
-                                            onClick={(e) => handleLike(post._id, e)}
-                                            sx={{ 
-                                                color: isLiked ? '#795663' : 'inherit',
-                                                '&:hover': {
-                                                    color: '#795663'
-                                                }
-                                            }}
-                                        >
-                                            <FavoriteIcon />
-                                        </IconButton>
-                                        <Typography variant="caption">
-                                            {post.likes?.length || 0}
-                                        </Typography>
-                                      </Box>
+                                    {/* Likes */}
+                                    <Box sx={{ position: 'absolute', right: 0, top: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
+                                      <IconButton 
+                                          size="small" 
+                                          onClick={(e) => handleLike(post._id, e)}
+                                          sx={{ 
+                                              color: isLiked ? '#795663' : 'inherit',
+                                              '&:hover': {
+                                                  color: '#795663'
+                                              }
+                                          }}
+                                      >
+                                        <FavoriteIcon />
+                                      </IconButton>
+                                      <Typography variant="caption">
+                                          {post.likes?.length || 0}
+                                      </Typography>
+                                    </Box>
                                     </Box>
                                 </Box>
                             </Box>
