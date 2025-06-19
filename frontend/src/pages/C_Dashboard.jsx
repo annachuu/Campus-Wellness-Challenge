@@ -21,11 +21,12 @@ import {
     Grid,
     Card,
     CardContent,
-    CardActionArea
+    CardActionArea,
+    IconButton
 } from '@mui/material'
-import { FaUser, FaPlus, FaUserPlus, FaTrophy } from 'react-icons/fa'
+import { FaUser, FaPlus, FaUserPlus, FaTrophy, FaTimes } from 'react-icons/fa'
 import '../styles/pages.css'
-import { getChallenges } from '../features/challenges/challengeSlice'
+import { getChallenges, deleteChallenge } from '../features/challenges/challengeSlice'
 
 function C_Dashboard() {
     const { user } = useSelector((state) => state.auth)
@@ -40,6 +41,20 @@ function C_Dashboard() {
     const handleChallengeClick = (challengeId) => {
         localStorage.setItem('selectedChallengeId', challengeId)
         navigate('/view-challenge')
+    }
+
+    const handleDeleteChallenge = async (challengeId, challengeName, e) => {
+        e.stopPropagation() // Prevent triggering the card click
+        if (window.confirm(`Are you sure you want to delete the challenge "${challengeName}"? This action cannot be undone.`)) {
+            try {
+                await dispatch(deleteChallenge(challengeId)).unwrap()
+                // Refresh the challenges list after deletion
+                dispatch(getChallenges())
+            } catch (error) {
+                console.error('Error deleting challenge:', error)
+                alert('Failed to delete challenge. Please try again.')
+            }
+        }
     }
 
     return (
@@ -86,22 +101,41 @@ function C_Dashboard() {
                                 <Grid item xs={12} sm={6} key={challenge._id} sx={{width: 250}}>
                                     <Card
                                         onClick={() => handleChallengeClick(challenge._id)}
-                                            sx={{ 
-                                                cursor: 'pointer',
-                                                transition: 'transform 0.2s, box-shadow 0.2s',
-                                                '&:hover': {
-                                                    transform: 'translateY(-4px)',
-                                                    boxShadow: 3
-                                                },
-                                                backgroundColor: '#8a9688'
-                                            }}
+                                        sx={{ 
+                                            cursor: 'pointer',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            '&:hover': {
+                                                transform: 'translateY(-4px)',
+                                                boxShadow: 3
+                                            },
+                                            backgroundColor: '#8a9688',
+                                            position: 'relative',
+                                            height: 320,
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                        }}
                                     >
-                                        <CardActionArea onClick={() => handleChallengeClick(challenge._id)}>
-                                            <CardContent sx={{backgroundColor: '#d9bcaf'}}>
-                                                <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                        <IconButton
+                                            onClick={(e) => handleDeleteChallenge(challenge._id, challenge.name, e)}
+                                            sx={{ 
+                                                position: 'absolute', 
+                                                top: 5, 
+                                                right: 5, 
+                                                zIndex: 1,
+                                                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                                                }
+                                            }}
+                                        >
+                                            <FaTimes />
+                                        </IconButton>
+                                        <CardActionArea onClick={() => handleChallengeClick(challenge._id)} sx={{ flexGrow: 1 }}>
+                                            <CardContent sx={{backgroundColor: '#d9bcaf', height: '100%', display: 'flex', flexDirection: 'column'}}>
+                                                <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF', mb: 1}} gutterBottom>
                                                     {challenge.name}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
+                                                <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 2, flexGrow: 1}} paragraph>
                                                     {challenge.description}
                                                 </Typography>
                                                 <Box sx={{ mb: 2 }}>

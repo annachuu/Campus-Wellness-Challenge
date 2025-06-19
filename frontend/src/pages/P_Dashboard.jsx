@@ -130,14 +130,17 @@ function P_Dashboard() {
                                                 transform: 'translateY(-4px)',
                                                 boxShadow: 3
                                             },
-                                            backgroundColor: '#8a9688'
+                                            backgroundColor: '#8a9688',
+                                            height: 320, // Fixed height for consistency
+                                            display: 'flex',
+                                            flexDirection: 'column'
                                         }}
                                     >
-                                        <CardContent>
-                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF'}} gutterBottom>
+                                        <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column'}}>
+                                            <Typography variant="h6" component="h3" sx={{ color: '#FFFFFF', mb: 1}} gutterBottom>
                                                 {challenge.name}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF'}} paragraph>
+                                            <Typography variant="body2" color="text.secondary" sx={{ color: '#FFFFFF', mb: 2, flexGrow: 1}} paragraph>
                                                 {challenge.description}
                                             </Typography>
                                             <Box sx={{ mb: 2 }}>

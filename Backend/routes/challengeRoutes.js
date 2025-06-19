@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createChallenge, getChallenges, getChallenge } = require('../controllers/challengeController')
+const { createChallenge, getChallenges, getChallenge, deleteChallenge } = require('../controllers/challengeController')
 const { protect } = require('../middleware/authMiddleware')
 
 router.route('/')
@@ -9,5 +9,6 @@ router.route('/')
 
 router.route('/:id')
     .get(protect, getChallenge)
+    .delete(protect, deleteChallenge)
 
 module.exports = router 

@@ -60,6 +60,20 @@ export const getChallenge = createAsyncThunk(
     }
 )
 
+// Delete challenge
+export const deleteChallenge = createAsyncThunk(
+    'challenges/delete',
+    async (id, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.user.token
+            return await challengeService.deleteChallenge(id, token)
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 export const challengeSlice = createSlice({
     name: 'challenge',
     initialState,
@@ -103,6 +117,20 @@ export const challengeSlice = createSlice({
                 state.challenge = action.payload
             })
             .addCase(getChallenge.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(deleteChallenge.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(deleteChallenge.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                const deletedId = action.payload.id
+                state.challenges = state.challenges.filter((challenge) => challenge._id !== deletedId)
+            })
+            .addCase(deleteChallenge.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

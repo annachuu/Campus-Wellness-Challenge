@@ -104,8 +104,35 @@ const getChallenge = asyncHandler(async (req, res) => {
     throw new Error('Not authorized to view this challenge')
 })
 
+// @desc    Delete challenge
+// @route   DELETE /api/challenges/:id
+// @access  Private (Coordinator only)
+const deleteChallenge = asyncHandler(async (req, res) => {
+    const challenge = await Challenge.findById(req.params.id)
+
+    if (!challenge) {
+        res.status(404)
+        throw new Error('Challenge not found')
+    }
+
+    // Check if the user is the creator of the challenge
+    if (challenge.createdBy.toString() !== req.user.id) {
+        res.status(401)
+        throw new Error('Not authorized to delete this challenge')
+    }
+
+    // Delete associated leaderboard entries first
+    await Leaderboard.deleteMany({ challenge: req.params.id })
+
+    // Delete the challenge
+    await Challenge.findByIdAndDelete(req.params.id)
+
+    res.status(200).json({ id: req.params.id })
+})
+
 module.exports = {
     createChallenge,
     getChallenges,
-    getChallenge
+    getChallenge,
+    deleteChallenge
 } 
